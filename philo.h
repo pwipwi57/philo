@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:21 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/06/25 02:51:05 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/07/03 03:53:41 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,26 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <string.h>
 # include <sys/time.h>
 # include <pthread.h>
 
 typedef struct s_philo
 {
 	int				n;
+	int				next;
 	char			*nb_char;
-	pthread_t		id;
-	pthread_mutex_t	fork;
 	time_t			last_eat;
-	int				dead;
 }	t_philo;
 
 typedef struct s_common
 {
-	int				n;
-	struct t_philo	*philo;
+	int				nb_philo;
+	pthread_mutex_t	*mutex;	
+	pthread_mutex_t	mutex_dead;	
+	t_philo			*philo;
 	size_t			time_begin;
-	int				time_to_dead;
+	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				dead;
@@ -60,9 +61,14 @@ t_philo		*init_philo(int ac, char **av);
 size_t		ft_strlen(const char *s);
 size_t		get_current_time(void);
 
-// write_message.c
-char		*ft_strcat_philo(char *nb, char *time, char *str);
-char		*create_message(size_t time, int n, char *str);
+// write_message_old.c
+// char		*ft_strcat_philo(char *nb, char *time, char *str);
+// char		*create_message(size_t time, int n, char *str);
+// int		write_message(t_common *common, t_philo philo, char *str);
+
+// write_mess.c
+void		ft_strcat_philo(char *nb, char *time, char *str, char *mess);
+void		create_message(size_t time, int n, char *str, char *mess);
 int			write_message(t_common *common, t_philo philo, char *str);
 
 #endif
