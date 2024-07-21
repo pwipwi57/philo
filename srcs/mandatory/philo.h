@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:21 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/07/03 17:50:52 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/07/21 19:22:06 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,30 +19,44 @@
 # include <string.h>
 # include <sys/time.h>
 # include <pthread.h>
+# include <limits.h>
 
 typedef struct s_philo
 {
 	int				n;
 	int				next;
 	char			*nb_char;
-	time_t			last_eat;
+	size_t			last_eat;
 }	t_philo;
 
 typedef struct s_common
 {
 	int				nb_philo;
+	pthread_t		*philo_thread;
 	pthread_mutex_t	*mutex;	
-	pthread_mutex_t	mutex_dead;	
+	pthread_mutex_t	mutex_dead;
+	pthread_mutex_t	mutex_write;
 	t_philo			**philo;
 	size_t			time_begin;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
+	size_t			time_to_die;
+	size_t			time_to_eat;
+	size_t			time_to_sleep;
+	int				nb_meal;
 	int				dead;
 }	t_common;
 
+typedef struct s_arg
+{
+	t_common		*common;
+	int				i;
+	pthread_mutex_t	mutex_i;	
+}	t_arg;
+
 // action.c
-int			philo_sleep(t_common *common, t_philo philo);
+int			test_die(t_common *co, t_philo *ph);
+int			take_left_fork_first(t_common *co, t_philo *ph);
+int			take_right_fork_first(t_common *co, t_philo *ph);
+int			philo_sleep(t_common *common, t_philo *philo);
 int			philo_eat(t_common *common, t_philo *philo);
 
 // atoi_itoa.c
@@ -51,24 +65,26 @@ int			calclen(int n);
 char		*rev(int size, char *res);
 char		*ft_itoa(int n);
 
-// init.c
-t_common	*init_common(int ac, char **av);
-t_philo		*init_philo(int ac, char **av);
+// create_philo.c
+void		*routine(void *arg);
+t_arg		*create_philo(t_common *common);
 
-// philo.c
+// init.c
+t_common	*init_common(t_common *common, int ac, char **av);
+t_philo		*init_philo(t_common *co, int i);
 
 // utils.c
+void		unlock_mutex(t_common *co, t_philo *ph);
 size_t		ft_strlen(const char *s);
 size_t		get_current_time(void);
+void		free_philo(t_philo **tab, int nb_philo);
+int			my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph);
 
-// write_message_old.c
-// char		*ft_strcat_philo(char *nb, char *time, char *str);
-// char		*create_message(size_t time, int n, char *str);
-// int		write_message(t_common *common, t_philo philo, char *str);
+void		destroy_free_all(t_arg *arg, t_common *common);
 
 // write_mess.c
-void		ft_strcat_philo(char *nb, char *time, char *str, char *mess);
-void		create_message(size_t time, int n, char *str, char *mess);
-int			write_message(t_common *common, t_philo philo, char *str);
+void		ft_strcat_philo(char *nb, char *time, char *str, char *new);
+int			create_message(size_t time, char *nb, char *str, char *mess);
+int			write_message(t_common *common, t_philo *philo, char *str);
 
 #endif

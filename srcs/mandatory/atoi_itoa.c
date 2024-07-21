@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:11:03 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/06/27 13:57:08 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/07/08 02:57:46 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,27 @@
 int	ft_atoi_pos(const char *nptr)
 {
 	int		i;
+	int		sign;
 	int		nb;
+	long	nbl;
 
 	i = 0;
-	nb = 0;
-	while ('0' <= nptr[i] && nptr[i] <= '9')
+	sign = 1;
+	nbl = 0;
+	while ((9 <= nptr[i] && nptr[i] <= 13) || nptr[i] == ' ')
+		i++;
+	if (nptr[i] == '-' || nptr[i] == '+')
 	{
-		nb = nb * 10 + (nptr[i] - 48);
+		if (nptr[i] == '-')
+			sign = -sign;
 		i++;
 	}
+	while ('0' <= nptr[i] && nptr[i] <= '9')
+	{
+		nbl = nbl * 10 + (nptr[i] - 48);
+		i++;
+	}
+	nb = nbl * sign;
 	return (nb);
 }
 
