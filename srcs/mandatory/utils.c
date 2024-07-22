@@ -14,7 +14,6 @@
 
 void	unlock_mutex(t_common *co, t_philo *philo)
 {
-	// printf("unlock / philo->n = %d\n", philo->n);
 		pthread_mutex_unlock(&co->mutex[philo->n]);
 		pthread_mutex_unlock(&co->mutex[philo->next]);
 }
@@ -72,8 +71,8 @@ int	my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph)
 		elapsed = (end.tv_sec - start.tv_sec) * 1000
 			+ (end.tv_usec - start.tv_usec) / 1000;
 		usleep(100);
-		// if (test_die(co, ph))
-		// 	return (1);
+		if (test_die(co, ph))
+			return (1);
 	}
 	return (0);
 }

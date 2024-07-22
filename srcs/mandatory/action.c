@@ -83,8 +83,6 @@ int	philo_sleep(t_common *common, t_philo *philo)
 	if (write_message(common, philo, "is thinking\n"))
 		return (1);
 	// usleep(50);
-	// if (my_usleep(1, common, philo))
-		// return (1);
 	return (0);
 }
 
@@ -94,7 +92,7 @@ int	philo_eat(t_common *common, t_philo *philo)
 		take_left_fork_first(common, philo);
 	else
 	{
-		usleep(100);
+		usleep(200);
 		take_right_fork_first(common, philo);
 	}
 	if (test_die(common, philo))
