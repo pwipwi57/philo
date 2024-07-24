@@ -67,7 +67,10 @@ int	main(int ac, char **av)
 		return (1);
 	i = -1;
 	while (++i < common->nb_philo)
-		pthread_join((common->philo_thread)[i], NULL);
+	{
+		if ((common->philo_thread)[i])
+			pthread_join((common->philo_thread)[i], NULL);
+	}
 	destroy_free_all(arg, common);
 	return (0);
 }
