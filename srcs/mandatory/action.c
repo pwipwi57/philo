@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:07 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/07/21 19:48:04 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/07/24 17:02:06 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,18 @@
 
 int	test_die(t_common *co, t_philo *ph)
 {
-	pthread_mutex_lock(&co->mutex_dead);
+	// pthread_mutex_lock(&co->mutex_dead);
 	if (co->dead == 1)
 		return (pthread_mutex_unlock(&co->mutex_dead), 1);
-	else if ((get_current_time() - ph->last_eat) >= co->time_to_die)
+	// pthread_mutex_unlock(&co->mutex_dead);
+	if ((get_current_time() - ph->last_eat) >= co->time_to_die)
 	{
+		pthread_mutex_lock(&co->mutex_dead);
 		co->dead = 1;
-		write_message(co, ph, "died\n");
 		pthread_mutex_unlock(&co->mutex_dead);
+		write_message(co, ph, "died\n");
 		return (1);
 	}
-	pthread_mutex_unlock(&co->mutex_dead);
 	return (0);
 }
 
@@ -82,7 +83,7 @@ int	philo_sleep(t_common *common, t_philo *philo)
 		return (1);
 	if (write_message(common, philo, "is thinking\n"))
 		return (1);
-	// usleep(50);
+	// usleep(10);
 	// if (my_usleep(1, common, philo))
 		// return (1);
 	return (0);
@@ -90,11 +91,10 @@ int	philo_sleep(t_common *common, t_philo *philo)
 
 int	philo_eat(t_common *common, t_philo *philo)
 {
-	if (!(philo->n % 2))
+	if ((philo->n % 2))
 		take_left_fork_first(common, philo);
 	else
 	{
-		usleep(100);
 		take_right_fork_first(common, philo);
 	}
 	if (test_die(common, philo))

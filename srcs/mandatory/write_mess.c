@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 13:51:31 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/07/07 20:55:22 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/07/23 17:32:58 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ int	write_message(t_common *common, t_philo *philo, char *str)
 	size_t	time_since_start;
 	char	mess[64];
 
+	// pthread_mutex_lock(&common->mutex_write);
 	memset(mess, 0, 64);
 	time_since_start = get_current_time() - common->time_begin;
 	if (time_since_start == common->time_begin)
 		return (perror("Getimeofday"), 1);
 	if (create_message(time_since_start, philo->nb_char, str, mess))
 		return (1);
-	pthread_mutex_lock(&common->mutex_write);
 	write(1, mess, ft_strlen(mess));
-	pthread_mutex_unlock(&common->mutex_write);
+	// pthread_mutex_unlock(&common->mutex_write);
 	return (0);
 }

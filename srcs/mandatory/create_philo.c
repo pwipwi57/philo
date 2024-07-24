@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:37:25 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/07/21 19:46:48 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:42:41 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	*routine(void *args)
 	((t_arg *)args)->common->philo[nb_philo]->n = nb_philo;
 	while (!test_die(arg->common, arg->common->philo[nb_philo])
 		&& i + 1 <= arg->common->nb_meal)
+	// while (i + 1 <= arg->common->nb_meal)
 	{
+		if (!i && nb_philo % 2)
+			usleep(50);
 		if (philo_eat(arg->common, arg->common->philo[nb_philo]))
 			return (NULL);
 		if (philo_sleep(arg->common, arg->common->philo[nb_philo]))
@@ -48,6 +51,7 @@ t_arg	*create_philo(t_common *common)
 		return (NULL);
 	arg->common = common;
 	arg->i = 0;
+	arg->common->time_begin = get_current_time();
 	pthread_mutex_init(&arg->mutex_i, NULL); //  a proteger
 	while (i < common->nb_philo)
 	{

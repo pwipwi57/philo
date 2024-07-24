@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:45:51 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/07/21 19:50:54 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/07/24 17:00:46 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph)
 	gettimeofday(&end, NULL);
 	elapsed = (end.tv_sec - start.tv_sec) * 1000
 		+ (end.tv_usec - start.tv_usec) / 1000;
-	while (elapsed <= milliseconds)
+	while (elapsed < milliseconds)
 	{
 		gettimeofday(&end, NULL);
 		elapsed = (end.tv_sec - start.tv_sec) * 1000
