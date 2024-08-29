@@ -35,7 +35,7 @@ $(OBJS_BDIR)%.o : $(SRCS_BDIR)%.c $(BONUS_HEADER) | $(OBJS_BDIR)
 	$(CC) $(FLAGS) -o $@ -c $<
 
 $(NAME): $(OBJS) $(HEADER)
-	$(CC) $(FLAGS) -o $@ $(OBJS) $(LIBFT_FLAG)
+	$(CC) $(FLAGS) -o $@ $(OBJS) $(LIBFT_FLAG) -fsanitize=thread -pthread
 
 $(BONUS_NAME): $(BONUS_OBJS) $(BONUS_HEADER)
 	$(CC) $(FLAGS) -o $@ $(BONUS_OBJS) $(LIBFT_FLAG)
