@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:45:51 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/07/24 17:00:46 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/08/29 19:44:39 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,16 @@
 
 void	unlock_mutex(t_common *co, t_philo *philo)
 {
+	if (&co->mutex[philo->n] < &co->mutex[philo->next])
+	{
 		pthread_mutex_unlock(&co->mutex[philo->n]);
 		pthread_mutex_unlock(&co->mutex[philo->next]);
+	}
+	else
+	{
+		pthread_mutex_unlock(&co->mutex[philo->next]);
+		pthread_mutex_unlock(&co->mutex[philo->n]);
+	}
 }
 
 size_t	ft_strlen(const char *s)

@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:37:25 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/08/29 18:46:42 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/08/29 19:28:22 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_arg	*create_philo(t_common *common)
 	pthread_mutex_init(&arg->mutex_i, NULL); //  a proteger
 	while (i < common->nb_philo)
 	{
-		if (pthread_create(&(common->philo_thread[arg->i]),
+		if (pthread_create(&(common->philo_thread[i]),
 				NULL, routine, (void *)arg))
 			return (NULL);
 		i++;
