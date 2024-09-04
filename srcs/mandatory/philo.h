@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:21 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/07/21 19:22:06 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/08/30 16:44:09 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void		*routine(void *arg);
 t_arg		*create_philo(t_common *common);
 
 // init.c
+int			init_mutex(t_common *common);
 t_common	*init_common(t_common *common, int ac, char **av);
 t_philo		*init_philo(t_common *co, int i);
 
@@ -78,8 +79,6 @@ void		unlock_mutex(t_common *co, t_philo *ph);
 size_t		ft_strlen(const char *s);
 size_t		get_current_time(void);
 void		free_philo(t_philo **tab, int nb_philo);
-int			my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph);
-
 void		destroy_free_all(t_arg *arg, t_common *common);
 
 // write_mess.c

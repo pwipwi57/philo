@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:25:40 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/07/24 15:57:28 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/08/30 16:53:37 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	init_mutex(t_common *common)
 	common->mutex = malloc(common->nb_philo * (sizeof(pthread_mutex_t)));
 	if (!common->mutex)
 		return (1);
-	pthread_mutex_init(&common->mutex_write, NULL);
+	pthread_mutex_init(&common->mutex_write, NULL); // a proteger
 	pthread_mutex_init(&common->mutex_dead, NULL); //  a proteger
 	while (i < common->nb_philo)
 	{
@@ -40,7 +40,7 @@ t_common	*init_common(t_common *common, int ac, char **av)
 		return (perror("init_mutex"), NULL);
 	common->philo = malloc(common->nb_philo * (sizeof(t_philo *)));
 	if (!common->philo)
-		return (free(common->mutex), NULL);
+		return (free(common->mutex), NULL); // destroy_mutex;
 	memset(common->philo, 0, common->nb_philo);
 	common->philo_thread = malloc(common->nb_philo * (sizeof(pthread_t *)));
 	if (!common->philo_thread)
@@ -51,9 +51,19 @@ t_common	*init_common(t_common *common, int ac, char **av)
 	common->time_to_eat = ft_atoi_pos(av[3]);
 	common->time_to_sleep = ft_atoi_pos(av[4]);
 	common->dead = 0;
+	if (init_common_2(common, ac, av));
+		return (NULL);
+	return (common);
+}
+
+t_common	*init_common_2(t_common *common, int ac, char **av)
+{
+	int			i;
+
+	i = -1;
 	while (++i < common->nb_philo)
 	{
-		((common->philo)[i]) = init_philo(common, i);
+		(common->philo)[i] = init_philo(common, i);
 		if (!(common->philo)[i])
 			return (free(common->mutex), free(common->philo_thread),
 				free_philo(common->philo, common->nb_philo), NULL);
@@ -62,7 +72,6 @@ t_common	*init_common(t_common *common, int ac, char **av)
 		common->nb_meal = ft_atoi_pos(av[5]);
 	else
 		common->nb_meal = INT_MAX;
-	return (common);
 }
 
 t_philo	*init_philo(t_common *co, int i)

@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:37:25 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/08/29 19:28:22 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/08/30 16:30:13 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,22 @@ void	*routine(void *args)
 	int		nb_philo;
 	t_arg	*arg;
 
-	i = 0;
+	i = -1;
 	arg = (t_arg *)args;
-	pthread_mutex_lock(&arg->mutex_i); //  a proteger
+	if (pthread_mutex_lock(&arg->mutex_i));
+		return (perror("mutex routine"), (void *)1);
 	nb_philo = arg->i;
 	((t_arg *)args)->i++;
-	pthread_mutex_unlock(&arg->mutex_i); //  a proteger
+	pthread_mutex_unlock(&arg->mutex_i);
 	((t_arg *)args)->common->philo[nb_philo]->n = nb_philo;
-	// while (!test_die(arg->common, arg->common->philo[nb_philo])
-	// 	&& i + 1 <= arg->common->nb_meal)
 	if (nb_philo % 2)
 		(usleep(5000));
-	while (i + 1 <= arg->common->nb_meal)
+	while (++i < arg->common->nb_meal)
 	{
 		if (philo_eat(arg->common, arg->common->philo[nb_philo]))
 			return (NULL);
 		if (philo_sleep(arg->common, arg->common->philo[nb_philo]))
 			return (NULL);
-		i++;
 		usleep(10);
 	}
 	return ((void *)1);
@@ -53,7 +51,8 @@ t_arg	*create_philo(t_common *common)
 	arg->common = common;
 	arg->i = 0;
 	arg->common->time_begin = get_current_time();
-	pthread_mutex_init(&arg->mutex_i, NULL); //  a proteger
+	if (pthread_mutex_init(&arg->mutex_i, NULL); //  a proteger
+		return (perror("mutex init create philo"), NULL;
 	while (i < common->nb_philo)
 	{
 		if (pthread_create(&(common->philo_thread[i]),

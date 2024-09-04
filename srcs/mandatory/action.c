@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:07 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/08/29 19:49:35 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/08/30 16:14:39 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 int	test_die(t_common *co, t_philo *ph)
 {
-	pthread_mutex_lock(&co->mutex_dead);
+	if (pthread_mutex_lock(&co->mutex_dead));
+		return (perror("mutex"), 1);
 	if (co->dead == 1)
 		return (pthread_mutex_unlock(&co->mutex_dead), 1);
 	pthread_mutex_unlock(&co->mutex_dead);
 	if ((get_current_time() - ph->last_eat) >= co->time_to_die)
 	{
-		pthread_mutex_lock(&co->mutex_dead);
+		if (pthread_mutex_lock(&co->mutex_dead));
+			return (perror("mutex"), 1);
 		co->dead = 1;
 		pthread_mutex_unlock(&co->mutex_dead);
 		write_message(co, ph, "died\n");
@@ -38,7 +40,7 @@ int	take_left_fork_first(t_common *co, t_philo *ph)
 		pthread_mutex_unlock(&co->mutex[ph->n]);
 		return (1);
 	}
-	write_message(co, ph, "has taken a fork (gauche)\n");
+	write_message(co, ph, "has taken a fork\n");
 	if (pthread_mutex_lock(&co->mutex[ph->next]))
 		return (pthread_mutex_unlock(&co->mutex[ph->n]), perror("mutex nxt"), 1);
 	if (test_die(co, ph))
@@ -46,7 +48,7 @@ int	take_left_fork_first(t_common *co, t_philo *ph)
 		unlock_mutex(co, ph);
 		return (1);
 	}
-	write_message(co, ph, "has taken a fork (droite)\n");
+	write_message(co, ph, "has taken a fork\n");
 	return (0);
 }
 
@@ -59,7 +61,7 @@ int	take_right_fork_first(t_common *co, t_philo *ph)
 		pthread_mutex_unlock(&co->mutex[ph->next]);
 		return (1);
 	}
-	write_message(co, ph, "has taken a fork (droite)\n");
+	write_message(co, ph, "has taken a fork\n");
 	if (pthread_mutex_lock(&co->mutex[ph->n]))
 		return (pthread_mutex_unlock(&co->mutex[ph->next]), perror("mutex"), 1);
 	if (test_die(co, ph))
@@ -67,7 +69,7 @@ int	take_right_fork_first(t_common *co, t_philo *ph)
 		unlock_mutex(co, ph);
 		return (1);
 	}
-	write_message(co, ph, "has taken a fork (gauche)\n");
+	write_message(co, ph, "has taken a fork\n");
 	return (0);
 }
 
@@ -90,9 +92,15 @@ int	philo_sleep(t_common *common, t_philo *philo)
 int	philo_eat(t_common *common, t_philo *philo)
 {
 	if ((philo->n % 2))
-		take_right_fork_first(common, philo);
+	{
+		if (take_right_fork_first(common, philo))
+			return (1);
+	}
 	else
-		take_left_fork_first(common, philo);
+	{
+		if (take_left_fork_first(common, philo))
+			return (1);
+	}
 	if (test_die(common, philo))
 		return (1);
 	philo->last_eat = (get_current_time());

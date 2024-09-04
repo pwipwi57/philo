@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:45:51 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/08/29 19:44:39 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/08/30 16:06:29 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,26 +61,3 @@ void	free_philo(t_philo **tab, int nb_philo)
 	return ;
 }
 
-int	my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph)
-{
-	struct timeval	start;
-	struct timeval	end;
-	unsigned int	elapsed;
-
-	if (!co && !ph)
-		return (1);
-	gettimeofday(&start, NULL);
-	gettimeofday(&end, NULL);
-	elapsed = (end.tv_sec - start.tv_sec) * 1000
-		+ (end.tv_usec - start.tv_usec) / 1000;
-	while (elapsed < milliseconds)
-	{
-		gettimeofday(&end, NULL);
-		elapsed = (end.tv_sec - start.tv_sec) * 1000
-			+ (end.tv_usec - start.tv_usec) / 1000;
-		usleep(100);
-		if (test_die(co, ph))
-			return (1);
-	}
-	return (0);
-}

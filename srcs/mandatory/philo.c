@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:05 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/08/29 19:55:20 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/08/30 16:49:58 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,25 @@ int	test_arg(int ac, char **av)
 	}
 	return (0);
 }
+
+void	join_pthread(t_common *common)
+{
+	int	i;
+
+	i = 0;
+	while (i < common->nb_philo)
+	{
+		if ((common->philo_thread)[i])
+		{
+			if (pthread_join((common->philo_thread)[i], NULL));		
+				return (perror("Pthread join"), return);	
+		}
+		i++;
+	}
+	return ;
+}
+
+void destroy_mutex(common)
 
 void	destroy_free_all(t_arg *arg, t_common *common)
 {
@@ -48,11 +67,10 @@ int	main(int ac, char **av)
 	t_common		*common;
 	t_common		sub_common;
 	t_arg			*arg;
-	int				i;
 
 	if (test_arg(ac, av))
 		return (1);
-	common = &sub_common;
+	common = &sub_common; // a voir comment corriger => mettre &common ?;
 	if (ft_atoi_pos(av[1]) == 1)
 	{
 		printf("0 1 has taken a fork\n");
@@ -66,13 +84,7 @@ int	main(int ac, char **av)
 	arg = create_philo(common);
 	if (!arg)
 		return (1);
-	i = 0;
-	while (i < common->nb_philo)
-	{
-		if ((common->philo_thread)[i])
-			pthread_join((common->philo_thread)[i], NULL);
-		i++;
-	}
+	join_pthread(common);
 	destroy_free_all(arg, common);
 	return (0);
 }
