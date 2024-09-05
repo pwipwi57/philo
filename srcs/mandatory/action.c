@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:07 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/08/30 16:14:39 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/05 14:56:39 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 int	test_die(t_common *co, t_philo *ph)
 {
-	if (pthread_mutex_lock(&co->mutex_dead));
+	if (pthread_mutex_lock(&co->mutex_dead))
 		return (perror("mutex"), 1);
 	if (co->dead == 1)
 		return (pthread_mutex_unlock(&co->mutex_dead), 1);
 	pthread_mutex_unlock(&co->mutex_dead);
 	if ((get_current_time() - ph->last_eat) >= co->time_to_die)
 	{
-		if (pthread_mutex_lock(&co->mutex_dead));
+		if (pthread_mutex_lock(&co->mutex_dead))
 			return (perror("mutex"), 1);
 		co->dead = 1;
 		pthread_mutex_unlock(&co->mutex_dead);
@@ -79,7 +79,7 @@ int	philo_sleep(t_common *common, t_philo *philo)
 		return (1);
 	if (write_message(common, philo, "is sleeping\n"))
 		return (1);
-	if (usleep(common->time_to_sleep * 1000))
+	if (my_usleep(common->time_to_sleep, common, philo))
 		return (1);
 	if (test_die(common, philo))
 		return (1);
@@ -106,7 +106,7 @@ int	philo_eat(t_common *common, t_philo *philo)
 	philo->last_eat = (get_current_time());
 	if (write_message(common, philo, "is eating\n"))
 		return (unlock_mutex(common, philo), 1);
-	if (usleep(common->time_to_sleep * 1000))
+	if (my_usleep(common->time_to_sleep, common, philo))
 		return (unlock_mutex(common, philo), 1);
 	unlock_mutex(common, philo);
 	return (0);

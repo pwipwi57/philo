@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:25:40 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/08/30 16:53:37 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/05 13:23:39 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,6 @@ int	init_mutex(t_common *common)
 
 t_common	*init_common(t_common *common, int ac, char **av)
 {
-	int			i;
-
-	i = -1;
 	common->nb_philo = ft_atoi_pos(av[1]);
 	if (init_mutex(common))
 		return (perror("init_mutex"), NULL);
@@ -51,7 +48,7 @@ t_common	*init_common(t_common *common, int ac, char **av)
 	common->time_to_eat = ft_atoi_pos(av[3]);
 	common->time_to_sleep = ft_atoi_pos(av[4]);
 	common->dead = 0;
-	if (init_common_2(common, ac, av));
+	if (!init_common_2(common, ac, av))
 		return (NULL);
 	return (common);
 }
@@ -72,6 +69,7 @@ t_common	*init_common_2(t_common *common, int ac, char **av)
 		common->nb_meal = ft_atoi_pos(av[5]);
 	else
 		common->nb_meal = INT_MAX;
+	return (common);
 }
 
 t_philo	*init_philo(t_common *co, int i)

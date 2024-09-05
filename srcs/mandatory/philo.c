@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:05 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/08/30 16:49:58 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/05 15:01:46 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,18 @@ void	join_pthread(t_common *common)
 	{
 		if ((common->philo_thread)[i])
 		{
-			if (pthread_join((common->philo_thread)[i], NULL));		
-				return (perror("Pthread join"), return);	
+			if (pthread_join((common->philo_thread)[i], NULL))
+			{
+				perror("Pthread join");
+				return ;
+			}
 		}
 		i++;
 	}
 	return ;
 }
 
-void destroy_mutex(common)
+// void destroy_mutex(common)
 
 void	destroy_free_all(t_arg *arg, t_common *common)
 {
@@ -74,7 +77,7 @@ int	main(int ac, char **av)
 	if (ft_atoi_pos(av[1]) == 1)
 	{
 		printf("0 1 has taken a fork\n");
-		usleep(ft_atoi_pos(av[2]) * 1000);
+		usleep(ft_atoi_pos(av[2]));
 		printf("%d 1 died\n", ft_atoi_pos(av[2]));
 		return (0);
 	}
