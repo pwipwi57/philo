@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:07 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/05 14:56:39 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/07 19:39:52 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,17 @@ int	test_die(t_common *co, t_philo *ph)
 
 int	take_left_fork_first(t_common *co, t_philo *ph)
 {
-	if (pthread_mutex_lock(&co->mutex[ph->n]))
+	if (pthread_mutex_lock(&co->mutex_fork[ph->n]))
 		return (perror("mutex"), 1);
 	if (test_die(co, ph))
 	{
-		pthread_mutex_unlock(&co->mutex[ph->n]);
+		pthread_mutex_unlock(&co->mutex_fork[ph->n]);
 		return (1);
 	}
 	write_message(co, ph, "has taken a fork\n");
-	if (pthread_mutex_lock(&co->mutex[ph->next]))
-		return (pthread_mutex_unlock(&co->mutex[ph->n]), perror("mutex nxt"), 1);
+	if (pthread_mutex_lock(&co->mutex_fork[ph->next]))
+		return (pthread_mutex_unlock(&co->mutex_fork[ph->n]),
+			perror("mutex nxt"), 1);
 	if (test_die(co, ph))
 	{
 		unlock_mutex(co, ph);
@@ -54,16 +55,16 @@ int	take_left_fork_first(t_common *co, t_philo *ph)
 
 int	take_right_fork_first(t_common *co, t_philo *ph)
 {
-	if (pthread_mutex_lock(&co->mutex[ph->next]))
+	if (pthread_mutex_lock(&co->mutex_fork[ph->next]))
 		return (perror("mutex next"), 1);
 	if (test_die(co, ph))
 	{
-		pthread_mutex_unlock(&co->mutex[ph->next]);
+		pthread_mutex_unlock(&co->mutex_fork[ph->next]);
 		return (1);
 	}
 	write_message(co, ph, "has taken a fork\n");
-	if (pthread_mutex_lock(&co->mutex[ph->n]))
-		return (pthread_mutex_unlock(&co->mutex[ph->next]), perror("mutex"), 1);
+	if (pthread_mutex_lock(&co->mutex_fork[ph->n]))
+		return (pthread_mutex_unlock(&co->mutex_fork[ph->next]), perror("mutex"), 1);
 	if (test_die(co, ph))
 	{
 		unlock_mutex(co, ph);

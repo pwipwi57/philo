@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:05 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/05 15:01:46 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/07 20:21:18 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	join_pthread(t_common *common)
 {
 	int	i;
 
-	i = 0;
-	while (i < common->nb_philo)
+	i = -1;
+	while (++i < common->nb_philo)
 	{
 		if ((common->philo_thread)[i])
 		{
@@ -42,27 +42,8 @@ void	join_pthread(t_common *common)
 				return ;
 			}
 		}
-		i++;
 	}
 	return ;
-}
-
-// void destroy_mutex(common)
-
-void	destroy_free_all(t_arg *arg, t_common *common)
-{
-	int	i;
-
-	i = 0;
-	while (i < common->nb_philo)
-		pthread_mutex_destroy(&common->mutex[i++]);
-	free(common->mutex);
-	pthread_mutex_destroy(&common->mutex_dead);
-	pthread_mutex_destroy(&arg->mutex_i);
-	pthread_mutex_destroy(&common->mutex_write);
-	free_philo(common->philo, common->nb_philo);
-	free(common->philo_thread);
-	free(arg);
 }
 
 int	main(int ac, char **av)

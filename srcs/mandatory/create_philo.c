@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:37:25 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/05 15:00:39 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/07 18:37:51 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*routine(void *args)
 	int		nb_philo;
 	t_arg	*arg;
 
-	i = -1;
+	i = 0;
 	arg = (t_arg *)args;
 	if (pthread_mutex_lock(&arg->mutex_i))
 		return (perror("mutex routine"), (void *)1);
@@ -27,11 +27,13 @@ void	*routine(void *args)
 	pthread_mutex_unlock(&arg->mutex_i);
 	((t_arg *)args)->common->philo[nb_philo]->n = nb_philo;
 	if (nb_philo % 2)
-		my_usleep(5, arg->common, arg->common->philo[nb_philo]); // a revoir (mettre 1)
-	while (++i < arg->common->nb_meal) // voir mettre i++ et commencer de 0
+		my_usleep(1, arg->common, arg->common->philo[nb_philo]);
+	while (i++ < arg->common->nb_meal)
 	{
 		if (philo_eat(arg->common, arg->common->philo[nb_philo]))
 			return (NULL);
+		if (i == arg->common->nb_meal)
+			break ;
 		if (philo_sleep(arg->common, arg->common->philo[nb_philo]))
 			return (NULL);
 		usleep(10);

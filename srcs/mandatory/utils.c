@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:45:51 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/05 14:55:47 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/07 19:48:29 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 void	unlock_mutex(t_common *co, t_philo *philo)
 {
-	if (&co->mutex[philo->n] < &co->mutex[philo->next])
+	if (&co->mutex_fork[philo->n] < &co->mutex_fork[philo->next])
 	{
-		pthread_mutex_unlock(&co->mutex[philo->n]);
-		pthread_mutex_unlock(&co->mutex[philo->next]);
+		pthread_mutex_unlock(&co->mutex_fork[philo->n]);
+		pthread_mutex_unlock(&co->mutex_fork[philo->next]);
 	}
 	else
 	{
-		pthread_mutex_unlock(&co->mutex[philo->next]);
-		pthread_mutex_unlock(&co->mutex[philo->n]);
+		pthread_mutex_unlock(&co->mutex_fork[philo->next]);
+		pthread_mutex_unlock(&co->mutex_fork[philo->n]);
 	}
 }
 
@@ -45,20 +45,15 @@ size_t	get_current_time(void)
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-void	free_philo(t_philo **tab, int nb_philo)
+int	write_message(t_common *common, t_philo *philo, char *str)
 {
-	int	i;
+	size_t	time_since_start;
 
-	i = 0;
-	if (tab == NULL)
-		return ;
-	while (i < nb_philo)
-	{
-		free(tab[i]->nb_char);
-		free(tab[i++]);
-	}
-	free(tab);
-	return ;
+	pthread_mutex_lock(&common->mutex_write);
+	time_since_start = get_current_time() - common->time_begin;
+	printf("%zu %d %s", time_since_start, (philo->n) + 1, str);
+	pthread_mutex_unlock(&common->mutex_write);
+	return (0);
 }
 
 int	my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph)
@@ -81,7 +76,7 @@ int	my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph)
 		if (elapsed <= milliseconds - 10)
 			usleep(9000);
 		else
-		usleep(333); // voir pour ralonger
+		usleep(1000); // voir pour ralonger
 		if (test_die(co, ph))
 			return (1);
 	}

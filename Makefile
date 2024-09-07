@@ -18,7 +18,7 @@ SRCS = $(SRCS_MDIR)action.c \
 		$(SRCS_MDIR)init.c \
 		$(SRCS_MDIR)philo.c \
 		$(SRCS_MDIR)utils.c \
-		$(SRCS_MDIR)write_mess.c \
+		$(SRCS_MDIR)free.c \
 
 BONUS_SRCS = $(SRCS_BDIR)pipex_bonus.c \
 			$(SRCS_BDIR)parsing_bonus.c \

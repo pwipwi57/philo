@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:21 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/05 14:56:01 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/07 20:47:03 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ typedef struct s_philo
 {
 	int				n;
 	int				next;
-	char			*nb_char;
 	size_t			last_eat;
 }	t_philo;
 
@@ -33,9 +32,10 @@ typedef struct s_common
 {
 	int				nb_philo;
 	pthread_t		*philo_thread;
-	pthread_mutex_t	*mutex;	
+	pthread_mutex_t	*mutex_fork;	
 	pthread_mutex_t	mutex_dead;
 	pthread_mutex_t	mutex_write;
+	pthread_mutex_t	mutex_count_meal;
 	t_philo			**philo;
 	size_t			time_begin;
 	size_t			time_to_die;
@@ -61,19 +61,19 @@ int			philo_eat(t_common *common, t_philo *philo);
 
 // atoi_itoa.c
 int			ft_atoi_pos(const char *nptr);
-int			calclen(int n);
-char		*rev(int size, char *res);
-char		*ft_itoa(int n);
 
 // create_philo.c
 void		*routine(void *arg);
 t_arg		*create_philo(t_common *common);
+
+void		destroy_mutex(t_common *common, int i);
 
 // init.c
 int			init_mutex(t_common *common);
 t_common	*init_common(t_common *common, int ac, char **av);
 t_common	*init_common_2(t_common *common, int ac, char **av);
 t_philo		*init_philo(t_common *co, int i);
+t_philo		*init_philo2(t_common *co, t_philo *philo, int i);
 
 // utils.c
 void		unlock_mutex(t_common *co, t_philo *ph);
@@ -83,9 +83,6 @@ void		free_philo(t_philo **tab, int nb_philo);
 int			my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph);
 void		destroy_free_all(t_arg *arg, t_common *common);
 
-// write_mess.c
-void		ft_strcat_philo(char *nb, char *time, char *str, char *new);
-int			create_message(size_t time, char *nb, char *str, char *mess);
 int			write_message(t_common *common, t_philo *philo, char *str);
 
 #endif
