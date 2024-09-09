@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:37:25 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/07 18:37:51 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/08 23:27:33 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,47 +20,39 @@ void	*routine(void *args)
 
 	i = 0;
 	arg = (t_arg *)args;
-	if (pthread_mutex_lock(&arg->mutex_i))
-		return (perror("mutex routine"), (void *)1);
+	pthread_mutex_lock(&arg->mutex_i);
 	nb_philo = arg->i;
-	((t_arg *)args)->i++;
+	arg->i++;
 	pthread_mutex_unlock(&arg->mutex_i);
-	((t_arg *)args)->common->philo[nb_philo]->n = nb_philo;
+	arg->common->philo[nb_philo].n = nb_philo;
 	if (nb_philo % 2)
-		my_usleep(1, arg->common, arg->common->philo[nb_philo]);
+		my_usleep(1, arg->common, &arg->common->philo[nb_philo]);
 	while (i++ < arg->common->nb_meal)
 	{
-		if (philo_eat(arg->common, arg->common->philo[nb_philo]))
+		if (philo_eat(arg->common, &arg->common->philo[nb_philo]))
 			return (NULL);
 		if (i == arg->common->nb_meal)
-			break ;
-		if (philo_sleep(arg->common, arg->common->philo[nb_philo]))
+			break ; //
+		if (philo_sleep(arg->common, &arg->common->philo[nb_philo]))
 			return (NULL);
 		usleep(10);
 	}
 	return ((void *)1);
 }
 
-t_arg	*create_philo(t_common *common)
+t_arg	*create_philo(t_arg *arg, t_common *common)
 {
-	t_arg	*arg;
 	int		i;
 
 	i = 0;
-	arg = malloc(sizeof(t_arg));
-	if (!arg)
-		return (NULL);
 	arg->common = common;
 	arg->i = 0;
-	arg->common->time_begin = get_current_time();
-	if (pthread_mutex_init(&arg->mutex_i, NULL)) //  a proteger
+	common->time_begin = get_time();
+	if (pthread_mutex_init(&arg->mutex_i, NULL))
 		return (perror("mutex init create philo"), NULL);
 	while (i < common->nb_philo)
-	{
-		if (pthread_create(&(common->philo_thread[i]),
+		if (pthread_create(&(common->philo_thread[i++]),
 				NULL, routine, (void *)arg))
 			return (NULL);
-		i++;
-	}
 	return (arg);
 }

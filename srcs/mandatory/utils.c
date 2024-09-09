@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:45:51 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/07 19:48:29 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/08 20:59:01 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-size_t	get_current_time(void)
+size_t	get_time(void)
 {
 	struct timeval	time;
 
@@ -50,7 +50,7 @@ int	write_message(t_common *common, t_philo *philo, char *str)
 	size_t	time_since_start;
 
 	pthread_mutex_lock(&common->mutex_write);
-	time_since_start = get_current_time() - common->time_begin;
+	time_since_start = get_time() - common->time_begin;
 	printf("%zu %d %s", time_since_start, (philo->n) + 1, str);
 	pthread_mutex_unlock(&common->mutex_write);
 	return (0);

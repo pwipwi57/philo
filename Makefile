@@ -49,11 +49,14 @@ $(OBJS_BDIR) :
 
 all : $(NAME) $(BONUS_NAME)
 
+sanitize : $(OBJS) $(HEADER)
+	$(CC) $(FLAGS) -o $@ $(OBJS) $(LIBFT_FLAG) -fsanitize=thread -pthread
+
 clean :
 	rm -rf $(OBJS_MDIR) $(OBJS_BDIR)
 
 fclean : clean
-	rm -f $(NAME) $(BONUS_NAME)
+	rm -f $(NAME) $(BONUS_NAME) sanitize
 	rm -rf $(OBJS_MDIR) $(OBJS_BDIR)
 
 re : fclean $(OBJS_MDIR) $(NAME)

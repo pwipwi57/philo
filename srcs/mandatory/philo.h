@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:21 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/07 20:47:03 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/08 21:09:14 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_philo
 {
 	int				n;
 	int				next;
+	pthread_mutex_t	mutex_last_eat;
 	size_t			last_eat;
 }	t_philo;
 
@@ -36,7 +37,7 @@ typedef struct s_common
 	pthread_mutex_t	mutex_dead;
 	pthread_mutex_t	mutex_write;
 	pthread_mutex_t	mutex_count_meal;
-	t_philo			**philo;
+	t_philo			*philo;
 	size_t			time_begin;
 	size_t			time_to_die;
 	size_t			time_to_eat;
@@ -64,21 +65,18 @@ int			ft_atoi_pos(const char *nptr);
 
 // create_philo.c
 void		*routine(void *arg);
-t_arg		*create_philo(t_common *common);
+t_arg		*create_philo(t_arg *arg, t_common *common);
 
 void		destroy_mutex(t_common *common, int i);
 
 // init.c
-int			init_mutex(t_common *common);
 t_common	*init_common(t_common *common, int ac, char **av);
 t_common	*init_common_2(t_common *common, int ac, char **av);
-t_philo		*init_philo(t_common *co, int i);
-t_philo		*init_philo2(t_common *co, t_philo *philo, int i);
 
 // utils.c
 void		unlock_mutex(t_common *co, t_philo *ph);
 size_t		ft_strlen(const char *s);
-size_t		get_current_time(void);
+size_t		get_time(void);
 void		free_philo(t_philo **tab, int nb_philo);
 int			my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph);
 void		destroy_free_all(t_arg *arg, t_common *common);
