@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:37:25 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/08 23:27:33 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/11 20:59:33 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ void	*routine(void *args)
 	{
 		if (philo_eat(arg->common, &arg->common->philo[nb_philo]))
 			return (NULL);
-		if (i == arg->common->nb_meal)
-			break ; //
 		if (philo_sleep(arg->common, &arg->common->philo[nb_philo]))
 			return (NULL);
 		usleep(10);
