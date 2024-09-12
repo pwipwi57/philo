@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:07 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/08 23:28:02 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/11 13:08:49 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,14 @@ int	test_die(t_common *co, t_philo *ph)
 	pthread_mutex_lock(&ph->mutex_last_eat);
 	if ((get_time() - ph->last_eat) >= co->time_to_die)
 	{
+		pthread_mutex_unlock(&ph->mutex_last_eat);
 		pthread_mutex_lock(&co->mutex_dead);
 		co->dead = 1;
 		pthread_mutex_unlock(&co->mutex_dead);
 		write_message(co, ph, "died\n");
 		return (1);
 	}
-	pthread_mutex_unlock(&ph->mutex_);
+	pthread_mutex_lock(&ph->mutex_last_eat);
 	return (0);
 }
 
