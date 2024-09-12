@@ -114,6 +114,8 @@ void	*routine(void *args)
 	{
 		if (philo_eat(arg->common, &arg->common->philo[nb_philo]))
 			return (NULL);
+		if (i == arg->common->nb_meal)
+			add_meal_count(arg->common);
 		if (philo_sleep(arg->common, &arg->common->philo[nb_philo]))
 			return (NULL);
 		usleep(10);

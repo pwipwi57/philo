@@ -16,6 +16,7 @@ SRCS = $(SRCS_MDIR)routine.c \
 		$(SRCS_MDIR)free.c \
 		$(SRCS_MDIR)init.c \
 		$(SRCS_MDIR)main.c \
+		$(SRCS_MDIR)meal_counter.c \
 		$(SRCS_MDIR)test_arg.c \
 		$(SRCS_MDIR)utils.c \
 

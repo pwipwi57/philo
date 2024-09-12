@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:21 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 21:42:07 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/12 22:28:31 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ typedef struct s_common
 	int				nb_philo;
 	pthread_t		*philo_thread;
 	pthread_mutex_t	*mutex_fork;	
-	pthread_mutex_t	mutex_dead;
+	pthread_mutex_t	mutex_end;
 	pthread_mutex_t	mutex_write;
-	pthread_mutex_t	mutex_count_meal;
+	pthread_mutex_t	mutex_meal_counter;
 	t_philo			*philo;
 	size_t			time_begin;
 	size_t			time_to_die;
@@ -44,7 +44,8 @@ typedef struct s_common
 	size_t			time_to_sleep;
 	size_t			time_to_think;
 	int				nb_meal;
-	int				dead;
+	int				meal_counter;
+	int				end;
 }	t_common;
 
 typedef struct s_arg
@@ -54,22 +55,25 @@ typedef struct s_arg
 	pthread_mutex_t	mutex_i;	
 }	t_arg;
 
-// free.c
+// free.c 4/5
 void		unlock_mutex(t_common *co, t_philo *philo);
 void		destroy_mutex(t_common *common, int i);
 void		destroy_free_all(t_arg *arg, t_common *common);
 
-// init.c
+// init.c 5/5
 t_common	*init_common(t_common *common, int ac, char **av);
 
-// routine.c
+// meal_counter.c
+void		add_meal_count(t_common *common);
+
+// routine.c 5/5
 void		*routine(void *args);
 
-// test_arg.c
+// test_arg.c 5/5
 long		ft_atoi(const char *nptr);
 int			test_arg(int ac, char **av);
 
-// utils.c
+// utils.c 5/5
 int			test_die(t_common *co, t_philo *ph);
 size_t		ft_strlen(const char *s);
 size_t		get_time(void);

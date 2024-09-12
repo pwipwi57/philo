@@ -6,11 +6,23 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:05 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 21:26:05 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/12 22:28:58 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+
+static int	test_end(t_common *common)
+{
+	int	i;
+	
+	i = 0;
+	pthread_mutex_lock(&common->mutex_end);
+	if (common->end == 0)
+		i = 1;
+	pthread_mutex_unlock(&common->mutex_end);
+	return (i);
+}
 
 static t_arg	*create_philo(t_arg *arg, t_common *common)
 {
@@ -33,7 +45,7 @@ static void	monitoring(t_common *common)
 {
 	int	i;
 
-	while (1)
+	while (1 && test_end(common))
 	{
 		i = -1;
 		while (++i < common->nb_philo)
@@ -42,9 +54,9 @@ static void	monitoring(t_common *common)
 			if (get_time() - common->philo[i].last_eat >= common->time_to_die)
 			{
 				pthread_mutex_unlock(&common->philo[i].mutex_last_eat);
-				pthread_mutex_lock(&common->mutex_dead);
-				common->dead = 1;
-				pthread_mutex_unlock(&common->mutex_dead);
+				pthread_mutex_lock(&common->mutex_end);
+				common->end = 1;
+				pthread_mutex_unlock(&common->mutex_end);
 				usleep(2000);
 				write_message(common, &common->philo[i], "died\n");
 				return ;

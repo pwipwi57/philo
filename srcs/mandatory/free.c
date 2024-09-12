@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 19:47:28 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 21:38:25 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/12 22:27:54 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ void	destroy_mutex(t_common *common, int i)
 	if (i >= 0)
 		pthread_mutex_destroy(&common->mutex_write);
 	if (i >= 1)
-		pthread_mutex_destroy(&common->mutex_dead);
+		pthread_mutex_destroy(&common->mutex_end);
 	if (i >= 2)
-		pthread_mutex_destroy(&common->mutex_count_meal);
+		pthread_mutex_destroy(&common->mutex_meal_counter);
 	if (i >= 3)
 	{
 		while (j < common->nb_philo)

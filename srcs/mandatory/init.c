@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:25:40 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 21:17:57 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/12 22:27:54 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ static void	init_mutex(t_common *common)
 {
 	if (pthread_mutex_init(&common->mutex_write, NULL))
 		(perror("mutex init"), exit(1));
-	if (pthread_mutex_init(&common->mutex_dead, NULL))
+	if (pthread_mutex_init(&common->mutex_end, NULL))
 		(perror("mutex init"), destroy_mutex(common, 0));
-	if (pthread_mutex_init(&common->mutex_count_meal, NULL))
+	if (pthread_mutex_init(&common->mutex_meal_counter, NULL))
 		(perror("mutex init"), destroy_mutex(common, 1));
 	init_fork(common);
 	return ;
@@ -82,7 +82,8 @@ static void	init_const(t_common *common, int ac, char **av)
 	common->time_to_die = ft_atoi(av[2]);
 	common->time_to_eat = ft_atoi(av[3]);
 	common->time_to_sleep = ft_atoi(av[4]);
-	common->dead = 0;
+	common->meal_counter = 0;
+	common->end = 0;
 	if (common->nb_philo % 2)
 		common->time_to_think = (common->time_to_eat - common->time_to_sleep);
 	else
