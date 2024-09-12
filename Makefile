@@ -20,9 +20,7 @@ SRCS = $(SRCS_MDIR)action.c \
 		$(SRCS_MDIR)utils.c \
 		$(SRCS_MDIR)free.c \
 
-BONUS_SRCS = $(SRCS_BDIR)pipex_bonus.c \
-			$(SRCS_BDIR)parsing_bonus.c \
-			$(SRCS_BDIR)utils_bonus.c \
+BONUS_SRCS = 
 
 OBJS = $(patsubst $(SRCS_MDIR)%.c,$(OBJS_MDIR)%.o,$(SRCS))
 
@@ -36,7 +34,6 @@ $(OBJS_BDIR)%.o : $(SRCS_BDIR)%.c $(BONUS_HEADER) | $(OBJS_BDIR)
 
 $(NAME): $(OBJS) $(HEADER)
 	$(CC) $(FLAGS) -o $@ $(OBJS) $(LIBFT_FLAG)
-#-fsanitize=thread -pthread
 
 $(BONUS_NAME): $(BONUS_OBJS) $(BONUS_HEADER)
 	$(CC) $(FLAGS) -o $@ $(BONUS_OBJS) $(LIBFT_FLAG)
