@@ -6,24 +6,29 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:45:51 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/11 21:23:15 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/12 21:22:34 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "main.h"
 
-void	unlock_mutex(t_common *co, t_philo *philo)
+int	test_die(t_common *co, t_philo *ph)
 {
-	if (&co->mutex_fork[philo->n] < &co->mutex_fork[philo->next])
+	pthread_mutex_lock(&co->mutex_dead);
+	if (co->dead == 1)
+		return (pthread_mutex_unlock(&co->mutex_dead), 1);
+	pthread_mutex_unlock(&co->mutex_dead);
+	pthread_mutex_lock(&ph->mutex_last_eat);
+	if ((get_time() - ph->last_eat) >= co->time_to_die)
 	{
-		pthread_mutex_unlock(&co->mutex_fork[philo->n]);
-		pthread_mutex_unlock(&co->mutex_fork[philo->next]);
+		pthread_mutex_unlock(&ph->mutex_last_eat);
+		pthread_mutex_lock(&co->mutex_dead);
+		co->dead = 1;
+		pthread_mutex_unlock(&co->mutex_dead);
+		return (1);
 	}
-	else
-	{
-		pthread_mutex_unlock(&co->mutex_fork[philo->next]);
-		pthread_mutex_unlock(&co->mutex_fork[philo->n]);
-	}
+	pthread_mutex_unlock(&ph->mutex_last_eat);
+	return (0);
 }
 
 size_t	ft_strlen(const char *s)
@@ -76,7 +81,7 @@ int	my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph)
 		if (elapsed <= milliseconds - 10)
 			usleep(9000);
 		else
-		usleep(1000); // voir pour ralonger
+		usleep(1000);
 		if (test_die(co, ph))
 			return (1);
 	}

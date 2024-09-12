@@ -1,38 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   action.c                                           :+:      :+:    :+:   */
+/*   routine.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:07 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 13:09:14 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/12 21:36:34 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "main.h"
 
-int	test_die(t_common *co, t_philo *ph)
-{
-	pthread_mutex_lock(&co->mutex_dead);
-	if (co->dead == 1)
-		return (pthread_mutex_unlock(&co->mutex_dead), 1);
-	pthread_mutex_unlock(&co->mutex_dead);
-	pthread_mutex_lock(&ph->mutex_last_eat);
-	if ((get_time() - ph->last_eat) >= co->time_to_die)
-	{
-		pthread_mutex_unlock(&ph->mutex_last_eat);
-		pthread_mutex_lock(&co->mutex_dead);
-		// write_message(co, ph, "died\n");
-		co->dead = 1;
-		pthread_mutex_unlock(&co->mutex_dead);
-		return (1);
-	}
-	pthread_mutex_unlock(&ph->mutex_last_eat);
-	return (0);
-}
-
-int	take_left_fork_first(t_common *co, t_philo *ph)
+static int	take_left_fork_first(t_common *co, t_philo *ph)
 {
 	pthread_mutex_lock(&co->mutex_fork[ph->n]);
 	if (test_die(co, ph))
@@ -51,7 +31,7 @@ int	take_left_fork_first(t_common *co, t_philo *ph)
 	return (0);
 }
 
-int	take_right_fork_first(t_common *co, t_philo *ph)
+static int	take_right_fork_first(t_common *co, t_philo *ph)
 {
 	pthread_mutex_lock(&co->mutex_fork[ph->next]);
 	if (test_die(co, ph))
@@ -70,7 +50,7 @@ int	take_right_fork_first(t_common *co, t_philo *ph)
 	return (0);
 }
 
-int	philo_sleep(t_common *common, t_philo *philo)
+static int	philo_sleep(t_common *common, t_philo *philo)
 {
 	if (test_die(common, philo))
 		return (1);
@@ -82,11 +62,12 @@ int	philo_sleep(t_common *common, t_philo *philo)
 		return (1);
 	if (write_message(common, philo, "is thinking\n"))
 		return (1);
-	usleep(1500);
+	if (my_usleep(common->time_to_think + 1, common, philo))
+		return(1);
 	return (0);
 }
 
-int	philo_eat(t_common *common, t_philo *philo)
+static int	philo_eat(t_common *common, t_philo *philo)
 {
 	if ((philo->n % 2))
 	{
@@ -112,4 +93,30 @@ int	philo_eat(t_common *common, t_philo *philo)
 		return (unlock_mutex(common, philo), 1);
 	unlock_mutex(common, philo);
 	return (0);
+}
+
+void	*routine(void *args)
+{
+	int		i;
+	int		nb_philo;
+	t_arg	*arg;
+
+	i = 0;
+	arg = (t_arg *)args;
+	pthread_mutex_lock(&arg->mutex_i);
+	nb_philo = arg->i;
+	arg->i++;
+	pthread_mutex_unlock(&arg->mutex_i);
+	arg->common->philo[nb_philo].n = nb_philo;
+	if (nb_philo % 2)
+		my_usleep(1, arg->common, &arg->common->philo[nb_philo]);
+	while (i++ < arg->common->nb_meal)
+	{
+		if (philo_eat(arg->common, &arg->common->philo[nb_philo]))
+			return (NULL);
+		if (philo_sleep(arg->common, &arg->common->philo[nb_philo]))
+			return (NULL);
+		usleep(10);
+	}
+	return ((void *)1);
 }

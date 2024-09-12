@@ -9,16 +9,16 @@ SRCS_BDIR = srcs/bonus/
 OBJS_MDIR = objs/mandatory/
 OBJS_BDIR = objs/bonus/
 
-HEADER = $(SRCS_MDIR)philo.h
+HEADER = $(SRCS_MDIR)main.h
 BONUS_HEADER = $(SRCS_BDIR)philo_bonus.h
 
-SRCS = $(SRCS_MDIR)action.c \
-		$(SRCS_MDIR)atoi_itoa.c \
-		$(SRCS_MDIR)create_philo.c \
-		$(SRCS_MDIR)init.c \
-		$(SRCS_MDIR)philo.c \
-		$(SRCS_MDIR)utils.c \
+SRCS = $(SRCS_MDIR)routine.c \
 		$(SRCS_MDIR)free.c \
+		$(SRCS_MDIR)init.c \
+		$(SRCS_MDIR)main.c \
+		$(SRCS_MDIR)test_arg.c \
+		$(SRCS_MDIR)utils.c \
+
 
 BONUS_SRCS = 
 

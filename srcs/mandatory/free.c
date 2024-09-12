@@ -6,11 +6,25 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 19:47:28 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/08 23:23:37 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/12 21:38:25 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "main.h"
+
+void	unlock_mutex(t_common *co, t_philo *philo)
+{
+	if (&co->mutex_fork[philo->n] < &co->mutex_fork[philo->next])
+	{
+		pthread_mutex_unlock(&co->mutex_fork[philo->n]);
+		pthread_mutex_unlock(&co->mutex_fork[philo->next]);
+	}
+	else
+	{
+		pthread_mutex_unlock(&co->mutex_fork[philo->next]);
+		pthread_mutex_unlock(&co->mutex_fork[philo->n]);
+	}
+}
 
 void	destroy_mutex(t_common *common, int i)
 {

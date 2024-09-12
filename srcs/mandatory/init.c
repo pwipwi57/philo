@@ -6,11 +6,11 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:25:40 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/08 23:17:33 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/12 21:17:57 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "main.h"
 
 static void	init_fork(t_common *common)
 {
@@ -75,10 +75,20 @@ static void	init_philo(t_common *common)
 	return ;
 }
 
-static void	init_meal(t_common *common, int ac, char **av)
+static void	init_const(t_common *common, int ac, char **av)
 {
+	common->nb_philo = ft_atoi(av[1]);
+	common->time_begin = get_time();
+	common->time_to_die = ft_atoi(av[2]);
+	common->time_to_eat = ft_atoi(av[3]);
+	common->time_to_sleep = ft_atoi(av[4]);
+	common->dead = 0;
+	if (common->nb_philo % 2)
+		common->time_to_think = (common->time_to_eat - common->time_to_sleep);
+	else
+		common->time_to_think = 0;
 	if (ac == 6)
-		common->nb_meal = ft_atoi_pos(av[5]);
+		common->nb_meal = ft_atoi(av[5]);
 	else
 		common->nb_meal = INT_MAX;
 	return ;
@@ -86,15 +96,9 @@ static void	init_meal(t_common *common, int ac, char **av)
 
 t_common	*init_common(t_common *common, int ac, char **av)
 {
-	common->nb_philo = ft_atoi_pos(av[1]);
-	common->time_begin = get_time();
-	common->time_to_die = ft_atoi_pos(av[2]);
-	common->time_to_eat = ft_atoi_pos(av[3]);
-	common->time_to_sleep = ft_atoi_pos(av[4]);
-	common->dead = 0;
+	init_const(common, ac, av);
 	init_mutex(common);
 	init_philo(common);
-	init_meal(common, ac, av);
 	common->philo_thread = malloc(common->nb_philo * (sizeof(pthread_t *)));
 	if (!common->philo_thread)
 		return (free(common->mutex_fork), free(common->philo),

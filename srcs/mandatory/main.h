@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:21 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/08 21:09:14 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/12 21:42:07 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef MAIN_H
+# define MAIN_H
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -42,6 +42,7 @@ typedef struct s_common
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
+	size_t			time_to_think;
 	int				nb_meal;
 	int				dead;
 }	t_common;
@@ -53,34 +54,26 @@ typedef struct s_arg
 	pthread_mutex_t	mutex_i;	
 }	t_arg;
 
-// action.c
-int			test_die(t_common *co, t_philo *ph);
-int			take_left_fork_first(t_common *co, t_philo *ph);
-int			take_right_fork_first(t_common *co, t_philo *ph);
-int			philo_sleep(t_common *common, t_philo *philo);
-int			philo_eat(t_common *common, t_philo *philo);
-
-// atoi_itoa.c
-int			ft_atoi_pos(const char *nptr);
-
-// create_philo.c
-void		*routine(void *arg);
-t_arg		*create_philo(t_arg *arg, t_common *common);
-
+// free.c
+void		unlock_mutex(t_common *co, t_philo *philo);
 void		destroy_mutex(t_common *common, int i);
+void		destroy_free_all(t_arg *arg, t_common *common);
 
 // init.c
 t_common	*init_common(t_common *common, int ac, char **av);
-t_common	*init_common_2(t_common *common, int ac, char **av);
+
+// routine.c
+void		*routine(void *args);
+
+// test_arg.c
+long		ft_atoi(const char *nptr);
+int			test_arg(int ac, char **av);
 
 // utils.c
-void		unlock_mutex(t_common *co, t_philo *ph);
+int			test_die(t_common *co, t_philo *ph);
 size_t		ft_strlen(const char *s);
 size_t		get_time(void);
-void		free_philo(t_philo **tab, int nb_philo);
-int			my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph);
-void		destroy_free_all(t_arg *arg, t_common *common);
-
 int			write_message(t_common *common, t_philo *philo, char *str);
+int			my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph);
 
 #endif

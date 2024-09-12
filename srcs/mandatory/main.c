@@ -1,18 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:05 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 13:09:46 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/12 21:26:05 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "main.h"
 
-void	monitoring(t_common *common)
+static t_arg	*create_philo(t_arg *arg, t_common *common)
+{
+	int		i;
+
+	i = 0;
+	arg->common = common;
+	arg->i = 0;
+	common->time_begin = get_time();
+	if (pthread_mutex_init(&arg->mutex_i, NULL))
+		return (perror("mutex init create philo"), NULL);
+	while (i < common->nb_philo)
+		if (pthread_create(&(common->philo_thread[i++]),
+				NULL, routine, (void *)arg))
+			return (NULL);
+	return (arg);
+}
+
+static void	monitoring(t_common *common)
 {
 	int	i;
 
@@ -28,6 +45,7 @@ void	monitoring(t_common *common)
 				pthread_mutex_lock(&common->mutex_dead);
 				common->dead = 1;
 				pthread_mutex_unlock(&common->mutex_dead);
+				usleep(2000);
 				write_message(common, &common->philo[i], "died\n");
 				return ;
 			}
@@ -37,30 +55,15 @@ void	monitoring(t_common *common)
 	}
 }
 
-static void	routine_one_philo(char *av)
-{
-	printf("0 1 has taken a fork\n");
-	usleep(ft_atoi_pos(av));
-	printf("%d 1 died\n", ft_atoi_pos(av));
-	exit(0);
-}
-
 static void	join_pthread(t_common *common)
 {
 	int	i;
 
 	i = -1;
 	while (++i < common->nb_philo)
-	{
 		if ((common->philo_thread)[i])
-		{
 			if (pthread_join((common->philo_thread)[i], NULL))
-			{
 				perror("Pthread join");
-				return ;
-			}
-		}
-	}
 	return ;
 }
 
@@ -71,8 +74,6 @@ int	main(int ac, char **av)
 
 	if (test_arg(ac, av))
 		return (1);
-	if (ft_atoi_pos(av[1]) == 1)
-		routine_one_philo(av[2]);
 	if (!init_common(&common, ac, av))
 		return (printf("Erreur initialisation\n"), 1);
 	if (!create_philo(&arg, &common))
