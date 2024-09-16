@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:45:51 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 22:27:54 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/16 23:43:48 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,6 @@ int	test_die(t_common *co, t_philo *ph)
 	if ((get_time() - ph->last_eat) >= co->time_to_die)
 	{
 		pthread_mutex_unlock(&ph->mutex_last_eat);
-		pthread_mutex_lock(&co->mutex_end);
-		co->end = 1;
-		pthread_mutex_unlock(&co->mutex_end);
 		return (1);
 	}
 	pthread_mutex_unlock(&ph->mutex_last_eat);
@@ -78,10 +75,10 @@ int	my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph)
 		gettimeofday(&end, NULL);
 		elapsed = (end.tv_sec - start.tv_sec) * 1000
 			+ (end.tv_usec - start.tv_usec) / 1000;
-		if (elapsed <= milliseconds - 10)
+		if (milliseconds > 10 && elapsed <= milliseconds - 10)
 			usleep(9000);
 		else
-		usleep(1000);
+			usleep(1000);
 		if (test_die(co, ph))
 			return (1);
 	}

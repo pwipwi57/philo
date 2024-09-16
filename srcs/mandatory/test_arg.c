@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 21:50:53 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 21:34:51 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/16 19:27:39 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,16 @@ int	test_arg(int ac, char **av)
 		return (1);
 	if (test_overflow(ac, av))
 		return (1);
-	if (av[1] == 0)
+	if (ft_atoi(av[1]) == 0)
+	{
+		printf("Il faut au moins 1 philo pour lancer la simulation.\n");
 		return (1);
-	if (ac == 6 && av[5] == 0)
+	}
+	if (ac == 6 && ft_atoi(av[5]) == 0)
+	{
+		printf("Il faut au moins 1 repas ou rien pour lancer la simulation.\n");
 		return (1);
+	}
 	if (ft_atoi(av[1]) == 1)
 		routine_one_philo(av[2]);
 	return (0);

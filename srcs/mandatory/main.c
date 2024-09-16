@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:05 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 23:48:06 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/16 19:05:04 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	test_end(t_common *common)
 {
 	int	i;
-	
+
 	i = 1;
 	pthread_mutex_lock(&common->mutex_end);
 	if (common->end == 1)

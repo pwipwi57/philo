@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 19:47:28 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 22:27:54 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/16 23:43:24 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,3 @@ void	destroy_free_all(t_arg *arg, t_common *common)
 	free(common->philo);
 	free(common->philo_thread);
 }
-
