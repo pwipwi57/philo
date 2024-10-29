@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:05 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/29 15:34:05 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/29 19:11:48 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ static void *thread_dead(void *arg)
 	common = (t_common *)arg;
 	sem_wait(common->sem_dead);
 	while (i++ < common->nb_philo)
-		sem_post(common->sem_end);
-	exit(0);
+		(sem_post(common->sem_meal));
+	while (i++ < common->nb_philo)
+		(sem_post(common->sem_end));
+	return (0);
 }
 
 static void *thread_meal(void *arg)
@@ -34,9 +36,11 @@ static void *thread_meal(void *arg)
 	common = (t_common *)arg;
 	while (i++ < common->nb_philo)
 		sem_wait(common->sem_meal);
+	i = 0;
 	while (i++ < common->nb_philo)
 		sem_post(common->sem_end);
-	exit(0);
+	sem_post(common->sem_dead);
+	return (0);
 }
 
 static void	pthread_monitoring(t_common *common)
@@ -45,10 +49,12 @@ static void	pthread_monitoring(t_common *common)
 
 	if (pthread_create(&thread,
 			NULL, thread_dead, (void *)common))
-		wait_all_and_exit(common, 1);
+		wait_all_and_exit(common, 1, 0);
+	pthread_detach(thread);
 	if (pthread_create(&thread,
 			NULL, thread_meal, (void *)common))
-		wait_all_and_exit(common, 1);
+		wait_all_and_exit(common, 1, 0);
+	pthread_detach(thread);
 	return;
 }
 
@@ -76,8 +82,8 @@ int	main(int ac, char **av)
 		return (1);
 	if (!init_common(&common, ac, av))
 		return (printf("Erreur initialisation\n"), 1);
-	pthread_monitoring(&common);
 	create_philo(&common);
-	wait_all_and_exit(&common, 0);
+	pthread_monitoring(&common);
+	wait_all_and_exit(&common, 0, 0);
 	return (0);
 }

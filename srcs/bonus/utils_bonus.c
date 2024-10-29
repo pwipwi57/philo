@@ -6,20 +6,23 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:45:51 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/29 15:41:43 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/29 18:51:37 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main_bonus.h"
 
-void	test_die(t_common *common)
+int	test_die(t_common *common)
 {
+	sem_wait(common->sem_write_read);
+	if (common->end || common->die)
+		return(sem_post(common->sem_write_read), 1);
+	sem_post(common->sem_write_read);
 	if ((get_time() - common->last_eat) < common->time_to_die)
-		return ;
-	sem_wait(common->sem_write);
-	write_message(common, "died");
+		return (0);
 	sem_post(common->sem_dead);
-	close_all_sem_exit(common, 2);
+	common->die = 1;
+	return (1);
 }
 
 size_t	ft_strlen(const char *s)
@@ -45,6 +48,10 @@ int	write_message(t_common *common, char *str)
 {
 	size_t	time_since_start;
 
+	sem_wait(common->sem_write_read);
+	if ((common->end) && !(common->die) && (str[0] == 'd'))
+		return(sem_post(common->sem_write_read), 1);
+	sem_post(common->sem_write_read);
 	sem_wait(common->sem_write);
 	time_since_start = get_time() - common->time_begin;
 	if (time_since_start == -(common->time_begin))
@@ -77,7 +84,8 @@ int	my_usleep(unsigned int milliseconds, t_common *co)
 			usleep(9000);
 		else
 			usleep(1000);
-		test_die(co);
+		if (test_die(co))
+			break ;
 	}
 	return (0);
 }

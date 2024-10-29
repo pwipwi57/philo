@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 15:10:25 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/29 15:41:16 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/29 19:12:21 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@
 # include <stdio.h>
 # include <string.h>
 # include <sys/time.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <pthread.h>
 # include <semaphore.h>
 # include <limits.h>
@@ -52,6 +55,7 @@ typedef struct s_common
 	sem_t			*sem_fork;
 	sem_t			*sem_meal;
 	sem_t			*sem_write;
+	sem_t			*sem_write_read;
 	pid_t			*philo;
 	size_t			time_begin;
 	size_t			last_eat;
@@ -62,6 +66,7 @@ typedef struct s_common
 	int				nb_meal;
 	int				meal_eaten;
 	int				end;
+	int				die;
 }	t_common;
 
 // typedef struct s_arg
@@ -72,7 +77,7 @@ typedef struct s_common
 
 // free.c 1/5
 void		close_all_sem_exit(t_common *common, int i);
-void		wait_all_and_exit(t_common *common, int exit_code);
+void		wait_all_and_exit(t_common *common, int exit_code, int mod);
 
 // init.c 5/5
 t_common	*init_common(t_common *common, int ac, char **av);
@@ -85,7 +90,7 @@ long		ft_atoi(const char *nptr);
 int			test_arg(int ac, char **av);
 
 // utils.c 5/5
-void			test_die(t_common *co);
+int			test_die(t_common *co);
 size_t		ft_strlen(const char *s);
 size_t		get_time(void);
 int			write_message(t_common *common, char *str);

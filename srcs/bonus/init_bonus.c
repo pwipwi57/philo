@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:25:40 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/29 15:39:58 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/29 17:14:41 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,15 @@ static void	init_sem(t_common *common)
 	if (common->sem_dead == SEM_FAILED)
 		(perror("sem_dead open :"), sem_close(common->sem_write),
 			sem_close(common->sem_end), sem_close(common->sem_eat),
-			sem_close(common->sem_meal), sem_close(common->sem_meal), exit(1));
+			sem_close(common->sem_meal), sem_close(common->sem_fork), exit(1));
 	sem_unlink("sem_dead");
+	common->sem_write_read = sem_open("sem_write_read", O_CREAT, 0777, 1);
+	if (common->sem_write_read == SEM_FAILED)
+		(perror("sem_write_read open :"), sem_close(common->sem_write),
+			sem_close(common->sem_end), sem_close(common->sem_eat),
+			sem_close(common->sem_meal), sem_close(common->sem_fork),
+			sem_close(common->sem_dead), exit(1));
+	sem_unlink("sem_write_read");
 	return ;
 }
 
@@ -67,6 +74,7 @@ static void	init_const(t_common *common, int ac, char **av)
 	common->time_to_sleep = ft_atoi(av[4]);
 	common->meal_eaten = 0;
 	common->end = 0;
+	common->die = 0;
 	if (common->nb_philo % 2 && common->time_to_sleep <= common->time_to_eat)
 		common->time_to_think = common->time_to_eat - common->time_to_sleep;
 	else

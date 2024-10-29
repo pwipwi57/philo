@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:07 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/29 15:40:24 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/29 19:19:50 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@ static void	take_fork(t_common *common)
 {
 	sem_wait(common->sem_eat);
 	(sem_wait(common->sem_fork), sem_wait(common->sem_fork));
-	test_die(common);
+	if (test_die(common))
+	{
+		(sem_post(common->sem_eat), sem_post(common->sem_fork), sem_post(common->sem_fork));
+		return;
+	}
 	write_message(common, "has taken a fork\n");
 	write_message(common, "has taken a fork\n");
 	sem_post(common->sem_eat);
@@ -25,10 +29,12 @@ static void	take_fork(t_common *common)
 
 static void	philo_sleep(t_common *common)
 {
-	test_die(common);
+	if (test_die(common))
+		return ;
 	write_message(common, "is sleeping\n");
 	my_usleep(common->time_to_sleep, common);
-	test_die(common);
+	if (test_die(common))
+		return ;
 	write_message(common, "is thinking\n");
 	if (common->nb_philo % 2)
 		my_usleep(common->time_to_think, common);
@@ -41,8 +47,9 @@ static void	*thread_monitoring(void *arg)
 
 	common = (t_common *)arg;
 	sem_wait(common->sem_end);
-	close_all_sem_exit(common, 0);
-	exit(0);
+	sem_wait(common->sem_write_read);
+	common->end = 1;
+	sem_post(common->sem_write_read);
 	return (0);
 }
 
@@ -53,13 +60,15 @@ static int	create_thread_end(t_common *common)
 	if (pthread_create(&thread,
 			NULL, thread_monitoring, (void *)common))
 		close_all_sem_exit(common, 1);
+	pthread_detach(thread);
 	return (0);
 }
 
 static int	philo_eat(t_common *common)
 {
 	take_fork(common);
-	test_die(common);
+	if (test_die(common))
+		return (sem_post(common->sem_fork), sem_post(common->sem_fork), 1);
 	common->last_eat = (get_time());
 	if (!common->last_eat)
 		close_all_sem_exit(common, 1);
@@ -70,19 +79,25 @@ static int	philo_eat(t_common *common)
 	return (0);
 }
 
-void	routine(t_common *common) // i num philo
+void	routine(t_common *common)
 {
 	if (common->nb % 2)
 		my_usleep(1, common);
 	create_thread_end(common);
-	while (1)
+	sem_wait(common->sem_write_read);
+	while (!common->end)
 	{
+		sem_post(common->sem_write_read);
 		philo_eat(common);
 		common->meal_eaten = (common->meal_eaten) + 1;
 		if (common->meal_eaten == common->nb_meal)
 			sem_post(common->sem_meal);
 		philo_sleep(common);
 		usleep(10);
+		sem_wait(common->sem_write_read);
 	}
-	return ;
+	sem_post(common->sem_write_read);
+	if (!common->die)
+		close_all_sem_exit(common, 0);
+	close_all_sem_exit(common, 5);
 }
