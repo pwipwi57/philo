@@ -10,7 +10,7 @@ OBJS_MDIR = objs/mandatory/
 OBJS_BDIR = objs/bonus/
 
 HEADER = $(SRCS_MDIR)main.h
-BONUS_HEADER = $(SRCS_BDIR)philo_bonus.h
+BONUS_HEADER = $(SRCS_BDIR)main_bonus.h
 
 SRCS = $(SRCS_MDIR)routine.c \
 		$(SRCS_MDIR)free.c \
@@ -18,10 +18,14 @@ SRCS = $(SRCS_MDIR)routine.c \
 		$(SRCS_MDIR)main.c \
 		$(SRCS_MDIR)meal_counter.c \
 		$(SRCS_MDIR)test_arg.c \
-		$(SRCS_MDIR)utils.c \
+		$(SRCS_MDIR)utils.c
 
-
-BONUS_SRCS = 
+BONUS_SRCS = $(SRCS_BDIR)free_bonus.c \
+             $(SRCS_BDIR)init_bonus.c \
+             $(SRCS_BDIR)main_bonus.c \
+             $(SRCS_BDIR)routine_bonus.c \
+             $(SRCS_BDIR)test_arg_bonus.c \
+             $(SRCS_BDIR)utils_bonus.c
 
 OBJS = $(patsubst $(SRCS_MDIR)%.c,$(OBJS_MDIR)%.o,$(SRCS))
 

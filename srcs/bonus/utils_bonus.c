@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:45:51 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/17 01:13:35 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/29 15:41:43 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "main.h"
+#include "main_bonus.h"
 
-int	test_die(t_common *co, t_philo *ph)
+void	test_die(t_common *common)
 {
-	pthread_mutex_lock(&co->mutex_end);
-	if (co->end == 1)
-		return (pthread_mutex_unlock(&co->mutex_end), 1);
-	pthread_mutex_unlock(&co->mutex_end);
-	pthread_mutex_lock(&ph->mutex_last_eat);
-	if ((get_time() - ph->last_eat) >= co->time_to_die)
-	{
-		pthread_mutex_unlock(&ph->mutex_last_eat);
-		return (1);
-	}
-	pthread_mutex_unlock(&ph->mutex_last_eat);
-	return (0);
+	if ((get_time() - common->last_eat) < common->time_to_die)
+		return ;
+	sem_wait(common->sem_write);
+	write_message(common, "died");
+	sem_post(common->sem_dead);
+	close_all_sem_exit(common, 2);
 }
 
 size_t	ft_strlen(const char *s)
@@ -43,31 +37,35 @@ size_t	get_time(void)
 	struct timeval	time;
 
 	if (gettimeofday(&time, NULL) == -1)
-		write(2, "gettimeofday() error\n", 22);
+		return(write(2, "gettimeofday() error\n", 22), 0);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-int	write_message(t_common *common, t_philo *philo, char *str)
+int	write_message(t_common *common, char *str)
 {
 	size_t	time_since_start;
 
-	pthread_mutex_lock(&common->mutex_write);
+	sem_wait(common->sem_write);
 	time_since_start = get_time() - common->time_begin;
-	printf("%zu %d %s", time_since_start, (philo->n) + 1, str);
-	pthread_mutex_unlock(&common->mutex_write);
+	if (time_since_start == -(common->time_begin))
+		close_all_sem_exit(common, 1);
+	printf("%zu %d %s", time_since_start, (common->nb) + 1, str);
+	sem_post(common->sem_write);
 	return (0);
 }
 
-int	my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph)
+int	my_usleep(unsigned int milliseconds, t_common *co)
 {
 	struct timeval	start;
 	struct timeval	end;
 	unsigned int	elapsed;
 
-	if (!co && !ph)
+	if (!co)
 		return (1);
-	gettimeofday(&start, NULL);
-	gettimeofday(&end, NULL);
+	if (gettimeofday(&start, NULL) == -1)
+		return(write(2, "gettimeofday() error\n", 22), 1);
+	if (gettimeofday(&end, NULL) == -1)
+		return(write(2, "gettimeofday() error\n", 22), 1);
 	elapsed = (end.tv_sec - start.tv_sec) * 1000
 		+ (end.tv_usec - start.tv_usec) / 1000;
 	while (elapsed <= milliseconds)
@@ -79,8 +77,7 @@ int	my_usleep(unsigned int milliseconds, t_common *co, t_philo *ph)
 			usleep(9000);
 		else
 			usleep(1000);
-		if (test_die(co, ph))
-			return (1);
+		test_die(co);
 	}
 	return (0);
 }

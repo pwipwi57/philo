@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 19:47:28 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 22:27:54 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/17 01:38:44 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,12 @@ void	destroy_mutex(t_common *common, int i)
 	exit (1);
 }
 
-void	destroy_free_all(t_arg *arg, t_common *common)
+void	destroy_free_all(t_arg *arg, t_common *common, int i)
 {
 	destroy_mutex(common, 5);
-	pthread_mutex_destroy(&arg->mutex_i);
 	free(common->philo);
 	free(common->philo_thread);
+	if (i)
+		return ;
+	pthread_mutex_destroy(&arg->mutex_i);
 }
-

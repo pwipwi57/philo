@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:05 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 23:48:06 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/17 01:39:44 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	test_end(t_common *common)
 {
 	int	i;
-	
+
 	i = 1;
 	pthread_mutex_lock(&common->mutex_end);
 	if (common->end == 1)
@@ -33,11 +33,12 @@ static t_arg	*create_philo(t_arg *arg, t_common *common)
 	arg->i = 0;
 	common->time_begin = get_time();
 	if (pthread_mutex_init(&arg->mutex_i, NULL))
-		return (perror("mutex init create philo"), NULL);
+		return (perror("mutex init create philo"),
+			destroy_free_all(arg, common, 1), NULL);
 	while (i < common->nb_philo)
 		if (pthread_create(&(common->philo_thread[i++]),
 				NULL, routine, (void *)arg))
-			return (NULL);
+			return (destroy_free_all(arg, common, 0), NULL);
 	return (arg);
 }
 
@@ -92,6 +93,6 @@ int	main(int ac, char **av)
 		return (1);
 	monitoring(&common);
 	join_pthread(&common);
-	destroy_free_all(&arg, &common);
+	destroy_free_all(&arg, &common, 0);
 	return (0);
 }

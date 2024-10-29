@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routine.c                                           :+:      :+:    :+:   */
+/*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:07 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 21:36:34 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/09/17 01:19:44 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,9 @@ static int	philo_sleep(t_common *common, t_philo *philo)
 		return (1);
 	if (write_message(common, philo, "is thinking\n"))
 		return (1);
-	if (my_usleep(common->time_to_think + 1, common, philo))
-		return(1);
+	if (common->nb_philo % 2)
+		if (my_usleep(common->time_to_think, common, philo))
+			return (1);
 	return (0);
 }
 
@@ -97,11 +98,10 @@ static int	philo_eat(t_common *common, t_philo *philo)
 
 void	*routine(void *args)
 {
-	int		i;
+	int		nb_meal_eaten;
 	int		nb_philo;
 	t_arg	*arg;
 
-	i = 0;
 	arg = (t_arg *)args;
 	pthread_mutex_lock(&arg->mutex_i);
 	nb_philo = arg->i;
@@ -110,11 +110,13 @@ void	*routine(void *args)
 	arg->common->philo[nb_philo].n = nb_philo;
 	if (nb_philo % 2)
 		my_usleep(1, arg->common, &arg->common->philo[nb_philo]);
-	while (i++ < arg->common->nb_meal)
+	nb_meal_eaten = 0;
+	while (1)
 	{
 		if (philo_eat(arg->common, &arg->common->philo[nb_philo]))
 			return (NULL);
-		if (i == arg->common->nb_meal)
+		nb_meal_eaten = nb_meal_eaten + 1;
+		if (nb_meal_eaten == arg->common->nb_meal)
 			add_meal_count(arg->common);
 		if (philo_sleep(arg->common, &arg->common->philo[nb_philo]))
 			return (NULL);

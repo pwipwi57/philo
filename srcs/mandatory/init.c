@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:25:40 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 22:27:54 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/29 15:18:45 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,14 @@ static void	init_const(t_common *common, int ac, char **av)
 	common->time_to_sleep = ft_atoi(av[4]);
 	common->meal_counter = 0;
 	common->end = 0;
-	if (common->nb_philo % 2)
-		common->time_to_think = (common->time_to_eat - common->time_to_sleep);
+	if (common->nb_philo % 2 && common->time_to_sleep <= common->time_to_eat)
+		common->time_to_think = common->time_to_eat - common->time_to_sleep;
 	else
 		common->time_to_think = 0;
 	if (ac == 6)
 		common->nb_meal = ft_atoi(av[5]);
 	else
-		common->nb_meal = INT_MAX;
+		common->nb_meal = (long)INT_MAX + 1;
 	return ;
 }
 

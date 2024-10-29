@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:21 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/12 22:28:31 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/29 15:16:06 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct s_common
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
 	size_t			time_to_think;
-	int				nb_meal;
+	long			nb_meal;
 	int				meal_counter;
 	int				end;
 }	t_common;
@@ -58,7 +58,7 @@ typedef struct s_arg
 // free.c 4/5
 void		unlock_mutex(t_common *co, t_philo *philo);
 void		destroy_mutex(t_common *common, int i);
-void		destroy_free_all(t_arg *arg, t_common *common);
+void		destroy_free_all(t_arg *arg, t_common *common, int i);
 
 // init.c 5/5
 t_common	*init_common(t_common *common, int ac, char **av);
