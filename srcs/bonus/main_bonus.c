@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:05 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/29 19:11:48 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/30 11:16:45 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,17 @@ static void *thread_meal(void *arg)
 
 static void	pthread_monitoring(t_common *common)
 {
-	pthread_t thread;
+	pthread_t pthread_dead;
+	pthread_t pthread_meal;
 
-	if (pthread_create(&thread,
+	if (pthread_create(&pthread_dead,
 			NULL, thread_dead, (void *)common))
 		wait_all_and_exit(common, 1, 0);
-	pthread_detach(thread);
-	if (pthread_create(&thread,
+	if (pthread_create(&pthread_meal,
 			NULL, thread_meal, (void *)common))
 		wait_all_and_exit(common, 1, 0);
-	pthread_detach(thread);
+	pthread_join(pthread_dead, NULL);
+	pthread_join(pthread_meal, NULL);
 	return;
 }
 

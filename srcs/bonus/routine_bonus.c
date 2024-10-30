@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:07 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/29 19:19:50 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/30 11:12:20 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,17 @@ static void	*thread_monitoring(void *arg)
 	return (0);
 }
 
-static int	create_thread_end(t_common *common)
+static size_t	create_thread_end(t_common *common)
 {
 	pthread_t thread;
 
 	if (pthread_create(&thread,
 			NULL, thread_monitoring, (void *)common))
-		close_all_sem_exit(common, 1);
-	pthread_detach(thread);
-	return (0);
+	{
+		perror(__func__);
+		close_all_sem_exit(common, 3);
+	}
+	return (thread);
 }
 
 static int	philo_eat(t_common *common)
@@ -81,9 +83,11 @@ static int	philo_eat(t_common *common)
 
 void	routine(t_common *common)
 {
+	pthread_t thread;
+
 	if (common->nb % 2)
 		my_usleep(1, common);
-	create_thread_end(common);
+	thread = create_thread_end(common);
 	sem_wait(common->sem_write_read);
 	while (!common->end)
 	{
@@ -97,6 +101,7 @@ void	routine(t_common *common)
 		sem_wait(common->sem_write_read);
 	}
 	sem_post(common->sem_write_read);
+	pthread_join(thread, NULL);
 	if (!common->die)
 		close_all_sem_exit(common, 0);
 	close_all_sem_exit(common, 5);

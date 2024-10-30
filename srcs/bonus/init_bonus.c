@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:25:40 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/29 17:14:41 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/30 11:10:58 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static void	init_const(t_common *common, int ac, char **av)
 	if (ac == 6)
 		common->nb_meal = ft_atoi(av[5]);
 	else
-		common->nb_meal = INT_MAX;
+		common->nb_meal = (long)INT_MAX + 1;
 	return ;
 }
 
