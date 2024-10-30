@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:45:51 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/29 18:51:37 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:37:43 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	test_die(t_common *common)
 {
-	sem_wait(common->sem_write_read);
+	sem_wait(common->sem_wr_rd);
 	if (common->end || common->die)
-		return(sem_post(common->sem_write_read), 1);
-	sem_post(common->sem_write_read);
+		return(sem_post(common->sem_wr_rd), 1);
+	sem_post(common->sem_wr_rd);
 	if ((get_time() - common->last_eat) < common->time_to_die)
 		return (0);
 	sem_post(common->sem_dead);
@@ -48,10 +48,10 @@ int	write_message(t_common *common, char *str)
 {
 	size_t	time_since_start;
 
-	sem_wait(common->sem_write_read);
+	sem_wait(common->sem_wr_rd);
 	if ((common->end) && !(common->die) && (str[0] == 'd'))
-		return(sem_post(common->sem_write_read), 1);
-	sem_post(common->sem_write_read);
+		return(sem_post(common->sem_wr_rd), 1);
+	sem_post(common->sem_wr_rd);
 	sem_wait(common->sem_write);
 	time_since_start = get_time() - common->time_begin;
 	if (time_since_start == -(common->time_begin))

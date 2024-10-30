@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:07 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/30 11:12:20 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:46:26 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,15 @@ static void	*thread_monitoring(void *arg)
 
 	common = (t_common *)arg;
 	sem_wait(common->sem_end);
-	sem_wait(common->sem_write_read);
+	sem_wait(common->sem_wr_rd);
 	common->end = 1;
-	sem_post(common->sem_write_read);
+	sem_post(common->sem_wr_rd);
 	return (0);
 }
 
 static size_t	create_thread_end(t_common *common)
 {
-	pthread_t thread;
+	pthread_t	thread;
 
 	if (pthread_create(&thread,
 			NULL, thread_monitoring, (void *)common))
@@ -83,24 +83,24 @@ static int	philo_eat(t_common *common)
 
 void	routine(t_common *common)
 {
-	pthread_t thread;
+	pthread_t	thread;
 
 	if (common->nb % 2)
 		my_usleep(1, common);
 	thread = create_thread_end(common);
-	sem_wait(common->sem_write_read);
+	sem_wait(common->sem_wr_rd);
 	while (!common->end)
 	{
-		sem_post(common->sem_write_read);
+		sem_post(common->sem_wr_rd);
 		philo_eat(common);
 		common->meal_eaten = (common->meal_eaten) + 1;
 		if (common->meal_eaten == common->nb_meal)
 			sem_post(common->sem_meal);
 		philo_sleep(common);
 		usleep(10);
-		sem_wait(common->sem_write_read);
+		sem_wait(common->sem_wr_rd);
 	}
-	sem_post(common->sem_write_read);
+	sem_post(common->sem_wr_rd);
 	pthread_join(thread, NULL);
 	if (!common->die)
 		close_all_sem_exit(common, 0);

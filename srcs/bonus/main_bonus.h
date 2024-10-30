@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 15:10:25 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/30 11:05:32 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:48:52 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct s_common
 	sem_t			*sem_fork;
 	sem_t			*sem_meal;
 	sem_t			*sem_write;
-	sem_t			*sem_write_read;
+	sem_t			*sem_wr_rd;
 	pid_t			*philo;
 	size_t			time_begin;
 	size_t			last_eat;

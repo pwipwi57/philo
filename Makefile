@@ -1,5 +1,5 @@
 NAME = philo
-BONUS_NAME = bonus
+BONUS_NAME = philo_bonus
 CC = cc
 
 FLAGS = -Wall -Werror -Wextra -g
@@ -50,6 +50,8 @@ $(OBJS_BDIR) :
 	mkdir -p $(OBJS_BDIR)
 
 all : $(NAME) $(BONUS_NAME)
+
+bonus : $(BONUS_NAME)
 
 sanitize : $(OBJS) $(HEADER)
 	$(CC) $(FLAGS) -o $@ $(OBJS) $(LIBFT_FLAG) -fsanitize=thread -pthread

@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:25:40 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/30 11:10:58 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/30 19:29:54 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,43 +14,43 @@
 
 static void	init_sem(t_common *common)
 {
-	common->sem_write = sem_open("sem_write", O_CREAT, 0777, 1);
+	sem_unlink("sem_write");
+	common->sem_write = sem_open("sem_write", O_CREAT | O_EXCL, 0666, 1);
 	if (common->sem_write == SEM_FAILED)
 		(perror("sem_write open"), exit(1));
-	sem_unlink("sem_write");
-	common->sem_end = sem_open("sem_end", O_CREAT, 0777, 0);
+	sem_unlink("sem_end");
+	common->sem_end = sem_open("sem_end", O_CREAT | O_EXCL, 0666, 0);
 	if (common->sem_end == SEM_FAILED)
 		(perror("sem_end open :"), sem_close(common->sem_write), exit(1));
-	sem_unlink("sem_end");
-	common->sem_meal = sem_open("sem_meal", O_CREAT, 0777, 0);
+	sem_unlink("sem_meal");
+	common->sem_meal = sem_open("sem_meal", O_CREAT | O_EXCL, 0666, 0);
 	if (common->sem_meal == SEM_FAILED)
 		(perror("sem_meal open :"), sem_close(common->sem_write),
 			sem_close(common->sem_end), exit(1));
-	sem_unlink("sem_meal");
-	common->sem_eat = sem_open("sem_eat", O_CREAT, 0777, 1);
+	sem_unlink("sem_eat");
+		common->sem_eat = sem_open("sem_eat", O_CREAT | O_EXCL, 0666, 1);
 	if (common->sem_eat == SEM_FAILED)
 		(perror("sem_eat open :"), sem_close(common->sem_write),
 			sem_close(common->sem_end), sem_close(common->sem_meal), exit(1));
-	sem_unlink("sem_eat");
-	common->sem_fork = sem_open("sem_fork", O_CREAT, 0777, common->nb_philo);
+	sem_unlink("sem_fork");
+	common->sem_fork = sem_open("sem_fork", O_CREAT | O_EXCL, 0666, common->nb_philo);
 	if (common->sem_fork == SEM_FAILED)
 		(perror("sem_fork open :"), sem_close(common->sem_write),
 			sem_close(common->sem_end), sem_close(common->sem_eat),
 			sem_close(common->sem_meal), exit(1));
-	sem_unlink("sem_fork");
-	common->sem_dead = sem_open("sem_dead", O_CREAT, 0777, 0);
+	sem_unlink("sem_dead");
+	common->sem_dead = sem_open("sem_dead", O_CREAT | O_EXCL, 0666, 0);
 	if (common->sem_dead == SEM_FAILED)
 		(perror("sem_dead open :"), sem_close(common->sem_write),
 			sem_close(common->sem_end), sem_close(common->sem_eat),
 			sem_close(common->sem_meal), sem_close(common->sem_fork), exit(1));
-	sem_unlink("sem_dead");
-	common->sem_write_read = sem_open("sem_write_read", O_CREAT, 0777, 1);
-	if (common->sem_write_read == SEM_FAILED)
-		(perror("sem_write_read open :"), sem_close(common->sem_write),
+	sem_unlink("sem_wr_rd");
+	common->sem_wr_rd = sem_open("sem_wr_rd", O_CREAT | O_EXCL, 0666, 1);
+	if (common->sem_wr_rd == SEM_FAILED)
+		(perror("sem_wr_rd open :"), sem_close(common->sem_write),
 			sem_close(common->sem_end), sem_close(common->sem_eat),
 			sem_close(common->sem_meal), sem_close(common->sem_fork),
 			sem_close(common->sem_dead), exit(1));
-	sem_unlink("sem_write_read");
 	return ;
 }
 
