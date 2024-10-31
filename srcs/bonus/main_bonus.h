@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 15:10:25 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/30 16:48:52 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/31 02:43:13 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_common
 // }	t_arg;
 
 // free.c 1/5
+void	close_sem_init_err(t_common *common, char *str, int mod);
 void		close_all_sem_exit(t_common *common, int i);
 void		wait_all_and_exit(t_common *common, int exit_code, int mod);
 

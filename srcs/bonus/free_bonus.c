@@ -6,15 +6,33 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 19:47:28 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/30 19:35:09 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/31 02:51:13 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main_bonus.h"
 
+void	close_sem_init_err(t_common *common, char *str, int mod)
+{
+	perror(str);
+	if (mod > 0)
+		(sem_close(common->sem_write), sem_unlink("sem_write"));
+	if (mod > 1)
+		(sem_close(common->sem_end), sem_unlink("sem_end"));
+	if (mod > 2)
+		(sem_close(common->sem_eat), sem_unlink("sem_eat"));
+	if (mod > 3)
+		(sem_close(common->sem_meal), sem_unlink("sem_meal"));
+	if (mod > 4)
+		(sem_close(common->sem_fork), sem_unlink("sem_fork"));
+	if (mod > 5)
+		(sem_close(common->sem_dead), sem_unlink("sem_dead"));
+	exit(1);
+}
+
 void	close_all_sem_exit(t_common *common, int i)
 {
-	// sem_post(common->sem_dead);
+	sem_post(common->sem_dead);
 	sem_close(common->sem_write);
 	sem_close(common->sem_dead);
 	sem_close(common->sem_eat);
@@ -44,7 +62,7 @@ void	wait_all_and_exit(t_common *common, int exit_code, int mod)
 		if (common->philo[i] < 1)
 			continue ;
 		waitpid(common->philo[i], &retu, 0);
-		if (retu == 1280 && !mod)
+		if (!mod && WIFEXITED(retu) && WEXITSTATUS(retu) == 5)
 		{
 			common->nb = i;
 			write_message(common, "died\n");

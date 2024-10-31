@@ -53,8 +53,8 @@ all : $(NAME) $(BONUS_NAME)
 
 bonus : $(BONUS_NAME)
 
-sanitize : $(OBJS) $(HEADER)
-	$(CC) $(FLAGS) -o $@ $(OBJS) $(LIBFT_FLAG) -fsanitize=thread -pthread
+sanitize : $(BONUS_OBJS) $(BONUS_HEADER)
+	$(CC) $(FLAGS) -o $@ $(BONUS_OBJS) $(LIBFT_FLAG) -fsanitize=thread -pthread
 
 clean :
 	rm -rf $(OBJS_MDIR) $(OBJS_BDIR)
