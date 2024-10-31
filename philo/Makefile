@@ -40,6 +40,5 @@ clean :
 
 fclean : clean
 	rm -f $(NAME) sanitize
-	rm -rf $(OBJS_MDIR)
 
 re : fclean $(OBJS_MDIR) $(NAME)

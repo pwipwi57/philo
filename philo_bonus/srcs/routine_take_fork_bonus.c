@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:35:14 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/31 15:40:49 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/31 17:27:39 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	take_fork(t_common *common)
 {
+	if (test_die(common))
+		return ;
 	sem_wait(common->sem_eat);
 	(sem_wait(common->sem_fork), sem_wait(common->sem_fork));
 	if (test_die(common))

@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:45:51 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/31 15:31:14 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/31 16:56:24 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,8 @@ int	my_usleep(unsigned int milliseconds, t_common *co)
 
 	if (!co)
 		return (1);
-	if (gettimeofday(&start, NULL) == -1)
-		return (write(2, "gettimeofday() error\n", 22), 1);
-	if (gettimeofday(&end, NULL) == -1)
-		return (write(2, "gettimeofday() error\n", 22), 1);
+	gettimeofday(&start, NULL);
+	gettimeofday(&end, NULL);
 	elapsed = (end.tv_sec - start.tv_sec) * 1000
 		+ (end.tv_usec - start.tv_usec) / 1000;
 	while (elapsed <= milliseconds)
@@ -81,9 +79,11 @@ int	my_usleep(unsigned int milliseconds, t_common *co)
 		elapsed = (end.tv_sec - start.tv_sec) * 1000
 			+ (end.tv_usec - start.tv_usec) / 1000;
 		if (milliseconds > 10 && elapsed <= milliseconds - 10)
-			usleep(9000);
-		else
+			usleep(10000);
+		else if (milliseconds > 1 && elapsed <= milliseconds - 1)
 			usleep(1000);
+		else
+			usleep(100);
 		if (test_die(co))
 			break ;
 	}

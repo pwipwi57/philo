@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:07 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/31 15:37:21 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/31 17:48:40 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ static void	philo_sleep(t_common *common)
 	if (test_die(common))
 		return ;
 	write_message(common, "is thinking\n");
-	if (common->nb_philo % 2)
-		my_usleep(common->time_to_think, common);
+	my_usleep(common->time_think, common);
 	return ;
 }
 

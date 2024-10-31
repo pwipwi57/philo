@@ -1,5 +1,4 @@
-NAME = philo/philo
-BONUS_NAME = philo_bonus/philo_bonus
+NAME = philo_bonus
 CC = cc
 
 FLAGS = -Wall -Werror -Wextra -g
@@ -7,23 +6,15 @@ FLAGS = -Wall -Werror -Wextra -g
 SRCS_MDIR = srcs/
 OBJS_MDIR = objs/
 
-HEADER = $(SRCS_MDIR)main.h
+HEADER = $(SRCS_MDIR)main_bonus.h
 
-SRCS = $(SRCS_MDIR)routine.c \
-		$(SRCS_MDIR)free.c \
-		$(SRCS_MDIR)init.c \
-		$(SRCS_MDIR)main.c \
-		$(SRCS_MDIR)meal_counter.c \
-		$(SRCS_MDIR)test_arg.c \
-		$(SRCS_MDIR)utils.c
-
-BONUS_SRCS = $(SRCS_BDIR)free_bonus.c \
-             $(SRCS_BDIR)init_bonus.c \
-             $(SRCS_BDIR)main_bonus.c \
-             $(SRCS_BDIR)routine_bonus.c \
-             $(SRCS_BDIR)routine_take_fork_bonus.c \
-             $(SRCS_BDIR)test_arg_bonus.c \
-             $(SRCS_BDIR)utils_bonus.c
+SRCS =	$(SRCS_MDIR)free_bonus.c \
+    	$(SRCS_MDIR)init_bonus.c \
+		$(SRCS_MDIR)main_bonus.c \
+        $(SRCS_MDIR)routine_bonus.c \
+        $(SRCS_MDIR)routine_take_fork_bonus.c \
+        $(SRCS_MDIR)test_arg_bonus.c \
+        $(SRCS_MDIR)utils_bonus.c
 
 OBJS = $(patsubst $(SRCS_MDIR)%.c,$(OBJS_MDIR)%.o,$(SRCS))
 
@@ -49,6 +40,5 @@ clean :
 
 fclean : clean
 	rm -f $(NAME) sanitize
-	rm -rf $(OBJS_MDIR)
 
 re : fclean $(OBJS_MDIR) $(NAME)

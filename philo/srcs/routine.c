@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 15:37:50 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/31 15:38:11 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/31 17:48:40 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	philo_sleep(t_common *common, t_philo *philo)
 	if (write_message(common, philo, "is thinking\n"))
 		return (1);
 	if (common->nb_philo % 2)
-		if (my_usleep(common->time_to_think, common, philo))
+		if (my_usleep(common->time_think, common, philo))
 			return (1);
 	return (0);
 }
@@ -120,7 +120,7 @@ void	*routine(void *args)
 			add_meal_count(arg->common);
 		if (philo_sleep(arg->common, &arg->common->philo[nb_philo]))
 			return (NULL);
-		usleep(10);
+		usleep(50);
 	}
 	return ((void *)1);
 }

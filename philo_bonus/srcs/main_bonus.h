@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 15:10:25 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/31 15:36:48 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/31 17:48:40 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_common
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
-	size_t			time_to_think;
+	size_t			time_think;
 	long			nb_meal;
 	long			meal_eaten;
 	int				end;
