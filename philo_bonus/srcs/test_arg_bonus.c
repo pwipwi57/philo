@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_arg.c                                         :+:      :+:    :+:   */
+/*   test_arg_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 21:50:53 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/29 19:41:16 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/31 15:30:47 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "main.h"
+#include "main_bonus.h"
 
 long	ft_atoi(const char *nptr)
 {
@@ -54,12 +54,15 @@ static int	test_overflow(int ac, char **av)
 	while (i < ac)
 	{
 		j = -1;
-		while(av[i][++j])
+		while (av[i][++j])
 		{
 			if (av[i][j] < '0' || av[i][j] > '9')
-				return(printf("Merci de ne mettre que des chiffres.\n"), 1);
+				return (printf("Merci de ne mettre que des chiffres.\n"), 1);
 		}
-		if (ft_strlen(av[i]) > 12 || ft_atoi(av[i++]) > INT_MAX)
+		j = 0;
+		while (av[i][j] == '0')
+			j++;
+		if (ft_strlen(av[i] + j) > 12 || ft_atoi(av[i++]) > INT_MAX)
 		{
 			printf("T'abuses pas un peu la ?\n");
 			return (1);

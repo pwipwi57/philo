@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:25:40 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/31 02:51:51 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/31 15:32:05 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static void	init_sem2(t_common *common)
 {
-	common->sem_fork = sem_open("sem_fork", O_CREAT | O_EXCL, 0666, common->nb_philo);
+	common->sem_fork = sem_open("sem_fork", O_CREAT | O_EXCL, 0666,
+			common->nb_philo);
 	if (common->sem_fork == SEM_FAILED)
 		close_sem_init_err(common, "sem_fork open", 4);
 	sem_unlink("sem_fork");
@@ -55,7 +56,7 @@ static void	init_sem(t_common *common)
 		close_sem_init_err(common, "sem_eat open", 3);
 	sem_unlink("sem_eat");
 	init_sem2(common);
-	return;
+	return ;
 }
 
 static void	init_philo(t_common *common)

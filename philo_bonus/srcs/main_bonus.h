@@ -6,19 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 15:10:25 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/31 02:43:13 by tlamarch         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   bonus.h                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/21 15:42:21 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/09/17 01:39:17 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/31 15:36:48 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +24,6 @@
 # include <pthread.h>
 # include <semaphore.h>
 # include <limits.h>
-
-// typedef struct s_philo
-// {
-// 	int				n;
-// 	int				next;
-// 	sem_t			*sem_last_eat;
-// 	size_t			last_eat;
-// }	t_philo;
 
 typedef struct s_common
 {
@@ -69,14 +49,8 @@ typedef struct s_common
 	int				die;
 }	t_common;
 
-// typedef struct s_arg
-// {
-// 	t_common		*common;
-// 	int				i;
-// }	t_arg;
-
 // free.c 1/5
-void	close_sem_init_err(t_common *common, char *str, int mod);
+void		close_sem_init_err(t_common *common, char *str, int mod);
 void		close_all_sem_exit(t_common *common, int i);
 void		wait_all_and_exit(t_common *common, int exit_code, int mod);
 
@@ -85,6 +59,9 @@ t_common	*init_common(t_common *common, int ac, char **av);
 
 // routine.c 5/5
 void		routine(t_common *common);
+
+// routine_take_fork.c
+void		take_fork(t_common *common);
 
 // test_arg.c 5/5
 long		ft_atoi(const char *nptr);

@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:42:05 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/31 02:52:44 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/31 15:31:27 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ static void	pthread_monitoring(t_common *common)
 	if (pthread_create(&pthread_meal,
 			NULL, thread_meal, (void *)common))
 		wait_all_and_exit(common, 1, 0);
-	 pthread_join(pthread_dead, NULL);
-	 pthread_join(pthread_meal, NULL);
+	pthread_join(pthread_dead, NULL);
+	pthread_join(pthread_meal, NULL);
 	return ;
 }
 

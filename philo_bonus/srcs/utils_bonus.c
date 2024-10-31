@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:45:51 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/31 02:55:01 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/10/31 15:31:14 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	test_die(t_common *common)
 {
 	sem_wait(common->sem_wr_rd);
 	if (common->end || common->die)
-		return(sem_post(common->sem_wr_rd), 1);
+		return (sem_post(common->sem_wr_rd), 1);
 	sem_post(common->sem_wr_rd);
 	if ((get_time() - common->last_eat) < common->time_to_die)
 		return (0);
@@ -40,7 +40,7 @@ size_t	get_time(void)
 	struct timeval	time;
 
 	if (gettimeofday(&time, NULL) == -1)
-		return(write(2, "gettimeofday() error\n", 22), 0);
+		return (write(2, "gettimeofday() error\n", 22), 0);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
@@ -50,7 +50,7 @@ int	write_message(t_common *common, char *str)
 
 	sem_wait(common->sem_wr_rd);
 	if ((common->end) && !(common->die) && (str[0] == 'd'))
-		return(sem_post(common->sem_wr_rd), 1);
+		return (sem_post(common->sem_wr_rd), 1);
 	sem_post(common->sem_wr_rd);
 	sem_wait(common->sem_write);
 	time_since_start = get_time() - common->time_begin;
@@ -70,9 +70,9 @@ int	my_usleep(unsigned int milliseconds, t_common *co)
 	if (!co)
 		return (1);
 	if (gettimeofday(&start, NULL) == -1)
-		return(write(2, "gettimeofday() error\n", 22), 1);
+		return (write(2, "gettimeofday() error\n", 22), 1);
 	if (gettimeofday(&end, NULL) == -1)
-		return(write(2, "gettimeofday() error\n", 22), 1);
+		return (write(2, "gettimeofday() error\n", 22), 1);
 	elapsed = (end.tv_sec - start.tv_sec) * 1000
 		+ (end.tv_usec - start.tv_usec) / 1000;
 	while (elapsed <= milliseconds)
