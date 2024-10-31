@@ -1,3 +1,9 @@
 *.pdf
+*.txt
 test.sh
 .gitignore
+philo/objs/
+philo/philo
+philo_bonus/objs/
+philo_bonus/philo_bonus
+thales_tester/
