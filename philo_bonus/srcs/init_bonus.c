@@ -6,7 +6,7 @@
 /*   By: tlamarch <tlamarch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 21:25:40 by tlamarch          #+#    #+#             */
-/*   Updated: 2024/10/31 18:19:24 by tlamarch         ###   ########.fr       */
+/*   Updated: 2024/11/02 22:40:51 by tlamarch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	init_sem(t_common *common)
 	if (common->sem_meal == SEM_FAILED)
 		close_sem_init_err(common, "sem_meal open", 2);
 	sem_unlink("sem_meal");
-		common->sem_eat = sem_open("sem_eat", O_CREAT | O_EXCL, 0666, 1);
+	common->sem_eat = sem_open("sem_eat", O_CREAT | O_EXCL, 0666, 1);
 	if (common->sem_eat == SEM_FAILED)
 		close_sem_init_err(common, "sem_eat open", 3);
 	sem_unlink("sem_eat");
